@@ -16,6 +16,15 @@ Formát záznamu:
 
 ---
 
+## Etapa 3 — Layout a úvodní stránka (2026-11-25 23:19)
+
+**Hotovo:** AC-1.1, AC-1.2, AC-1.3, AC-1.4, AC-1.5, AC-9.5, AC-9.6, AC-9.7, AC-9.8. `Navbar` (`glass-1`, zmenšení při scrollu, mobilní `Drawer`), `Footer` s odkazy na všechny právní stránky, vlastní 404 a 500, formátovače `src/lib/format/` (ceny, plochy, data, `Intl.PluralRules('cs')`, `nbsp`), klientsky bezpečný `src/lib/media-url.ts`, `ListingCard` (vertical + horizontal + tečky galerie + srdce) + `ListingCardSkeleton`, živý endpoint `/api/locations/suggest`, kompletní úvodní stránka `/` (Hero + `HeroSearchPanel`, 5 dlaždic kategorií, _Nové nabídky_, _Doporučené nabídky_, _Oblíbené lokality_ 8 měst s počty z DB, pruh důvěry, CTA pro makléře), statické vzorové stránky (`/o-nas`, `/kontakt`, `/podminky`, `/ochrana-udaju`, `/cookies`, `/inzerce`) a zástupné výpisové routy `/prodej/...` a `/pronajem/...`.
+**Odchylky:** Čisté URL helpery (`sanitizeStorageKey`, `getImageVariantUrl`) odděleny do `src/lib/media-url.ts`, aby je klientská komponenta `ListingCard` mohla používat bez importu `node:fs`.
+**Měření:** `pnpm check:tokens` OK (56 souborů), `typecheck` OK, `lint` OK, `test` 18/18, `test:e2e` 5/5 (QA A1, A2, AC-9.7, axe na `/` 0 kritických/vážných chyb). Vizuální rubrika `DESIGN.md` kap. 13: 5/5 ve všech 10 kritériích; 0 chyb v konzoli a `overflow=false` na 390/768/1280/1536 px.
+**Snímky:** `docs/screenshots/etapa-3/` (`home-390.png`, `home-768.png`, `home-1280.png`, `home-1536.png`).
+**Zbývá / známé problémy:** Oblíbené srdce zatím jen lokálně přepíná stav (plné napojení na účty v etapě 7).
+**Další krok:** Etapa 4 — Vyhledávání a výpis (filtrační lišta, drawer, histogram, řazení, stránkování, `nuqs`, `/api/search`).
+
 ## Etapa 2 — Design systém, logo a styleguide (2026-11-25 23:08)
 
 **Hotovo:** AC-9.8 (logo ReaPorta: 3 SVG směry, kontaktní arch `docs/screenshots/etapa-2/logo-contact-sheet.png`, vybrán Směr B „Oblouk + bod“, zdůvodnění v `docs/BRAND.md`, všechny soubory v `public/brand/` včetně wordmarku Fraunces v křivkách, multi-size `favicon.ico`, PNG ikon a `og-default.png`), komponenty `Logo` a `LogoMark`, všech 29 UI primitiv v `src/components/ui/` nad Radix UI a výhradně z tokenů, skript `pnpm check:tokens`, interaktivní `/dev/styleguide` s ověřením české diakritiky v Fraunces i Inter a přepínačem simulace `reduced-motion`.

@@ -1,11 +1,99 @@
 {
   "meta": {
-    "title": "ReaPorta — Realitní portál",
-    "description": "Hledání a inzerce nemovitostí k prodeji a pronájmu v České republice."
+    "title": "ReaPorta — Brána k vašemu novému domovu",
+    "description": "Český realitní portál pro prodej a pronájem bytů, domů, pozemků a komerčních prostor."
   },
-  "stage0": {
-    "eyebrow": "Připravujeme portál",
-    "heading": "Základ aplikace je připraven.",
-    "body": "Prostředí, databáze i nástrojový řetězec jsou aktivní. Následuje databázové schéma a design systém."
+  "nav": {
+    "homeLabel": "ReaPorta, úvodní stránka",
+    "sale": "Prodej",
+    "rent": "Pronájem",
+    "agents": "Makléři",
+    "advertise": "Inzerce",
+    "signIn": "Přihlásit se",
+    "addListing": "Vložit inzerát",
+    "openMenu": "Otevřít menu",
+    "closeMenu": "Zavřít menu"
+  },
+  "home": {
+    "eyebrow": "Český realitní portál",
+    "heroTitle": "Najděte místo, kterému budete říkat domov.",
+    "heroSubtitle": "Prozkoumejte prověřené byty, rodinné domy i pozemky po celé České republice. Přehledně, bez rušivého balastu a s živou mapou.",
+    "searchOfferLabel": "Typ nabídky",
+    "searchCategoryLabel": "Kategorie",
+    "searchCategoryAll": "Všechny kategorie",
+    "searchLocationLabel": "Lokalita",
+    "searchLocationPlaceholder": "Město, městská část nebo kraj…",
+    "searchSubmit": "Hledat",
+    "searchEmptyLocations": "Žádnou shodu jsme nenašli.",
+    "heroHighlightLabel": "Aktuálně v nabídce",
+    "categoriesEyebrow": "Rychlý výběr",
+    "categoriesTitle": "Co právě hledáte",
+    "categories": {
+      "flat": "Byty",
+      "flatDesc": "Od 1+kk po mezonety",
+      "house": "Domy",
+      "houseDesc": "Rodinné domy, vily i chalupy",
+      "land": "Pozemky",
+      "landDesc": "Stavební parcely a zahrady",
+      "commercial": "Komerční",
+      "commercialDesc": "Kanceláře, obchody a sklady",
+      "other": "Ostatní",
+      "otherDesc": "Garáže, stání a sklepy"
+    },
+    "newestEyebrow": "Čerstvě přidané",
+    "newestTitle": "Nové nabídky",
+    "featuredEyebrow": "Výběr zájemců",
+    "featuredTitle": "Doporučené nabídky",
+    "viewAll": "Zobrazit vše",
+    "citiesEyebrow": "Oblíbené destinace",
+    "citiesTitle": "Oblíbené lokality",
+    "trustEyebrow": "Důvěryhodná data",
+    "trustListings": "aktivních nabídek v katalogu",
+    "trustAgents": "makléřů a soukromých inzerentů",
+    "trustCities": "měst a obcí po celé ČR",
+    "ctaEyebrow": "Pro makléře a vlastníky",
+    "ctaTitle": "Prodáváte nebo pronajímáte nemovitost?",
+    "ctaBody": "Vložte nabídku přehledným průvodcem během několika minut. Fotografie vyniknou v čistém designu a poptávky dostanete přímo do přehledu.",
+    "ctaPrimary": "Začít inzerovat",
+    "ctaSecondary": "Více o inzerci"
+  },
+  "card": {
+    "badgeNew": "Nové",
+    "badgeReduced": "Zlevněno",
+    "favoriteAdd": "Přidat do oblíbených",
+    "favoriteRemove": "Odebrat z oblíbených",
+    "favoriteLoginHint": "Pro uložení oblíbených nabídek se prosím přihlaste (účty budou aktivní v dalším kroku).",
+    "noPhoto": "Bez fotografie",
+    "priceNegotiable": "K jednání"
+  },
+  "footer": {
+    "tagline": "Moderní realitní portál s důrazem na přehlednost, kvalitní prezentaci a férová data.",
+    "colOffers": "Nabídky",
+    "colPortal": "O portálu",
+    "colLegal": "Právní informace",
+    "saleFlats": "Prodej bytů",
+    "saleHouses": "Prodej domů",
+    "rentFlats": "Pronájem bytů",
+    "saleLand": "Prodej pozemků",
+    "about": "O nás",
+    "contact": "Kontakt",
+    "advertise": "Pro makléře",
+    "terms": "Podmínky použití",
+    "privacy": "Ochrana údajů",
+    "cookies": "Cookies",
+    "rights": "Všechna práva vyhrazena. Ukázkový projekt s fiktivními daty."
+  },
+  "errors": {
+    "notFoundEyebrow": "Chyba 404",
+    "notFoundTitle": "Tuto stránku jsme nenašli.",
+    "notFoundBody": "Odkaz může být zastaralý nebo byl inzerát odstraněn. Zkuste se vrátit na úvodní stránku.",
+    "notFoundAction": "Zpět na úvod",
+    "serverEyebrow": "Chyba 500",
+    "serverTitle": "Něco se nepovedlo.",
+    "serverBody": "Zkuste to prosím znovu. Pokud potíže přetrvávají, vraťte se na úvodní stránku.",
+    "retry": "Zkusit znovu"
+  },
+  "static": {
+    "sampleNotice": "Vzorový text pro MVP prostředí — před ostrým spuštěním nahraďte finálním právním zněním."
   }
 }
