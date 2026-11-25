@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { BRAND } from "@/config/brand";
 import "./globals.css";
 
@@ -53,7 +54,9 @@ export default async function RootLayout({
     <html lang="cs" className={`${fraunces.variable} ${inter.variable}`}>
       <body className="font-sans antialiased text-body">
         <div className="page-aurora" aria-hidden="true" />
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        <NuqsAdapter>
+          <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

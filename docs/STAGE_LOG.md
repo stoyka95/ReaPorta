@@ -16,6 +16,15 @@ Formát záznamu:
 
 ---
 
+## Etapa 4 — Vyhledávání a výpis (2026-11-25 23:33)
+
+**Hotovo:** AC-2.1, AC-2.2, AC-2.3, AC-2.4, AC-2.5, AC-2.6, AC-2.7 (a AC-2.8 výzva k přihlášení do etapy 7). Endpoint `GET /api/search`, URL jako jediný zdroj pravdy přes `nuqs` (`NuqsAdapter` + `nuqs/server` parsery), SSR první výsledek s kanonickým URL a `noindex` při > 2 filtrech, sticky `FilterBar` (`glass-1`), `FilterDrawer` (`glass-3`) se všemi filtry z AC-2.1, cenový rozsah s histogramem z DB, 5 způsobů řazení, přepínač mřížka/seznam, stránkování po 24 bez layout shiftu, prázdný stav s _Zrušit filtry_.
+**Odchylky:** Žádné.
+**Měření:** `pnpm check:tokens` OK (60 souborů), `typecheck` OK, `lint` OK, `test` 23/23 (včetně všech filtrů a 5 řazení proti `reaporta_test` v 293 ms, tedy hluboko pod 300 ms limitem AC-2.6), `test:e2e` 7/7 (QA A3–A8, Zpět/Vpřed, sdílení URL, axe na `/prodej/byty` 0 kritických/vážných chyb). Vizuální rubrika `DESIGN.md` kap. 13: 5/5; 0 chyb v konzoli a `overflow=false` na 390/768/1280/1536 px.
+**Snímky:** `docs/screenshots/etapa-4/` (`search-390.png`, `search-768.png`, `search-1280.png`, `search-1536.png`).
+**Zbývá / známé problémy:** Uložení hledání bude po etapě 7 ukládat do `saved_searches`.
+**Další krok:** Etapa 5 — Mapa (MapLibre GL, `supercluster`, `PricePin`, `ClusterPin`, `/api/search/map`, bbox v URL, propojení s výpisem, mobilní mapa s bottom sheetem).
+
 ## Etapa 3 — Layout a úvodní stránka (2026-11-25 23:19)
 
 **Hotovo:** AC-1.1, AC-1.2, AC-1.3, AC-1.4, AC-1.5, AC-9.5, AC-9.6, AC-9.7, AC-9.8. `Navbar` (`glass-1`, zmenšení při scrollu, mobilní `Drawer`), `Footer` s odkazy na všechny právní stránky, vlastní 404 a 500, formátovače `src/lib/format/` (ceny, plochy, data, `Intl.PluralRules('cs')`, `nbsp`), klientsky bezpečný `src/lib/media-url.ts`, `ListingCard` (vertical + horizontal + tečky galerie + srdce) + `ListingCardSkeleton`, živý endpoint `/api/locations/suggest`, kompletní úvodní stránka `/` (Hero + `HeroSearchPanel`, 5 dlaždic kategorií, _Nové nabídky_, _Doporučené nabídky_, _Oblíbené lokality_ 8 měst s počty z DB, pruh důvěry, CTA pro makléře), statické vzorové stránky (`/o-nas`, `/kontakt`, `/podminky`, `/ochrana-udaju`, `/cookies`, `/inzerce`) a zástupné výpisové routy `/prodej/...` a `/pronajem/...`.

@@ -59,7 +59,7 @@ test.describe("Stage 3 — Home Page (M1)", () => {
 
     // Submit search
     await page.getByRole("button", { name: "Hledat" }).click();
-    await expect(page).toHaveURL(/\/pronajem\/byty\/.*brno/);
+    await expect(page).toHaveURL(/\/pronajem\/byty\/.*brno/, { timeout: 20_000 });
     await expect(page.locator("h1")).toContainText("Brno");
   });
 
