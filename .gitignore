@@ -1,0 +1,18 @@
+node_modules/
+.next/
+out/
+dist/
+coverage/
+playwright-report/
+test-results/
+.env
+.env.*
+!.env.example
+storage/
+*.log
+.DS_Store
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
+# generované fotky ze seedu (lze znovu vytvořit)
+seed/generated/

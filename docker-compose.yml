@@ -1,0 +1,30 @@
+# Volitelné: pokud nemáš PostgreSQL nainstalovaný lokálně, spusť `docker compose up -d`.
+# Databáze reaporta_dev i reaporta_test se vytvoří při prvním startu.
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: reaporta_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - reaporta-pgdata:/var/lib/postgresql/data
+      - ./scripts/docker-init-db.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # webové rozhraní
+
+volumes:
+  reaporta-pgdata:
