@@ -16,6 +16,15 @@ Formát záznamu:
 
 ---
 
+## Etapa 2 — Design systém, logo a styleguide (2026-11-25 23:08)
+
+**Hotovo:** AC-9.8 (logo ReaPorta: 3 SVG směry, kontaktní arch `docs/screenshots/etapa-2/logo-contact-sheet.png`, vybrán Směr B „Oblouk + bod“, zdůvodnění v `docs/BRAND.md`, všechny soubory v `public/brand/` včetně wordmarku Fraunces v křivkách, multi-size `favicon.ico`, PNG ikon a `og-default.png`), komponenty `Logo` a `LogoMark`, všech 29 UI primitiv v `src/components/ui/` nad Radix UI a výhradně z tokenů, skript `pnpm check:tokens`, interaktivní `/dev/styleguide` s ověřením české diakritiky v Fraunces i Inter a přepínačem simulace `reduced-motion`.
+**Odchylky:** Kopie `public/brand/favicon.ico` i do `public/favicon.ico`, aby přímé požadavky prohlížeče na `/favicon.ico` nevracely 404.
+**Měření:** `pnpm check:tokens` OK (38 souborů, 0 porušení), `typecheck` OK, `lint` OK, `test` 13/13, `test:e2e` 2/2 (axe: 0 kritických a vážných chyb; Fraunces i Inter načteny; klávesnicová navigace Dialog/Chip ověřena). Vizuální rubrika `DESIGN.md` kap. 13: 5/5 ve všech 10 kritériích; 0 chyb v konzoli a bez přetečení na 390/768/1280/1536 px.
+**Snímky:** `docs/screenshots/etapa-2/` (`logo-contact-sheet.png`, `styleguide-390.png`, `styleguide-768.png`, `styleguide-1280.png`, `styleguide-1536.png`).
+**Zbývá / známé problémy:** Žádné.
+**Další krok:** Etapa 3 — Layout, navigace, patička, formátovače, `ListingCard`, úvodní stránka (M1) a statické stránky.
+
 ## Etapa 1 — Databáze a seed (2026-11-25 22:50)
 
 **Hotovo:** Kompletní Drizzle schéma (18 tabulek, 17 enumů, indexy na všech FK a vyhledávacích sloupcích, generovaný `price_per_m2`), SQL migrace (`0000_initial_schema.sql` + `0001_search_triggers_and_indexes.sql` s `immutable_unaccent`, GIN trigram indexem na `locations` a triggerem pro `search_text`), `StorageProvider` + `/media/[...key]`, generátor fotek (`pnpm photos:generate`, 40 architektonických SVG→WebP scén ve 3 variantách + blur + loga agentur), deterministický seed (`faker.seed(2026)`), builder vyhledávání (`src/lib/search/build-query.ts`), dotazy v `src/db/queries/`, jednotkové a integrační testy proti `reaporta_test`.
