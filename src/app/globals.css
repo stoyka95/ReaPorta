@@ -314,6 +314,18 @@
   .reaporta-panel-enter {
     animation: reaporta-panel-in var(--dur-base) var(--ease-out);
   }
+
+  .cluster-pin {
+    background-color: var(--cluster-bg);
+    box-shadow:
+      0 0 0 6px var(--cluster-ring),
+      var(--shadow-2);
+  }
+
+  .approx-area-ring {
+    background-color: var(--cluster-ring);
+    border: 2px solid var(--accent);
+  }
 }
 
 @keyframes reaporta-shimmer {

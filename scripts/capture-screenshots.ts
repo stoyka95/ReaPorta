@@ -60,18 +60,17 @@ async function main(): Promise<void> {
         page.on("console", onConsole);
 
         const fullUrl = `${baseUrl}${target.url}`;
-        await page.goto(fullUrl, { waitUntil: "networkidle", timeout: 45_000 });
+        await page.goto(fullUrl, { waitUntil: "load", timeout: 45_000 });
         await page.evaluate(async () => {
           await document.fonts.ready;
           const totalHeight = document.body.scrollHeight;
-          for (let y = 0; y <= totalHeight; y += 600) {
+          for (let y = 0; y <= totalHeight; y += 700) {
             window.scrollTo(0, y);
-            await new Promise((r) => setTimeout(r, 60));
+            await new Promise((r) => setTimeout(r, 50));
           }
           window.scrollTo(0, 0);
         });
-        await page.waitForLoadState("networkidle");
-        await page.waitForTimeout(target.waitMs ?? 300);
+        await page.waitForTimeout(target.waitMs ?? 1200);
 
         const overflow = await page.evaluate(
           () => document.documentElement.scrollWidth > window.innerWidth + 1,

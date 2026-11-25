@@ -24,3 +24,9 @@ Důsledek: Skripty v `scripts/*.ts` běží přímo přes `pnpm` bez dalšího b
 Kontext: Zadání pro běh v sandboxu zakazuje použití Mailpitu; `docker-compose.yml` jej ponechává jen jako volitelnou službu.
 Rozhodnutí: V dev prostředí běží pouze kontejner `db` (PostgreSQL 16) a odchozí e-maily se ukládají výhradně do tabulky `email_outbox`.
 Důsledek: Ověřování e-mailů v testech a QA probíhá nad tabulkou `email_outbox` místo SMTP UI Mailpitu.
+
+## 2026-11-25 · Etapa 5 · Použití `maplibre-gl` v5 místo v6
+
+Kontext: `maplibre-gl@6` vyžaduje externí ESM worker (`maplibre-gl-worker.mjs`), což v Next.js 15 Webpack bundleru způsobovalo chybu načtení workeru v konzoli.
+Rozhodnutí: Připnuta stabilní verze `maplibre-gl@^5.5.0` (5.24.1) s vestavěným workerem; v6 zamítnuta pro nekompatibilitu s výchozím Next.js bundlerem.
+Důsledek: Mapa renderuje vektorové dlaždice bez chyb v konzoli a bez ručního kopírování worker souborů do `public/`.

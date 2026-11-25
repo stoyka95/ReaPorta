@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SearchPageClient } from "@/components/search/SearchPageClient";
-import { getPriceHistogram, searchListings } from "@/db/queries/listings";
+import { getPriceHistogram, searchListings, searchMapPoints } from "@/db/queries/listings";
 import { getLocationByShortOrFullSlug } from "@/db/queries/locations";
 import { CATEGORY_LABELS } from "@/lib/format";
 import { CATEGORY_URL_TO_ENUM, OFFER_ENUM_TO_URL, type OfferType } from "@/lib/search/schema";
@@ -68,9 +68,10 @@ export async function renderSearchPage(params: {
     initialUrlState,
   );
 
-  const [initialResults, initialHistogram] = await Promise.all([
+  const [initialResults, initialHistogram, initialMapPoints] = await Promise.all([
     searchListings(filters),
     getPriceHistogram(filters),
+    searchMapPoints(filters),
   ]);
 
   const offerTitle = params.offerType === "sale" ? "Prodej" : "Pronájem";
@@ -103,6 +104,7 @@ export async function renderSearchPage(params: {
       breadcrumbs={breadcrumbs}
       initialResults={initialResults}
       initialHistogram={initialHistogram}
+      initialMapPoints={initialMapPoints}
       initialUrlState={initialUrlState}
     />
   );

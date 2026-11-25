@@ -16,6 +16,15 @@ Formát záznamu:
 
 ---
 
+## Etapa 5 — Mapa (2026-11-25 23:56)
+
+**Hotovo:** AC-3.1, AC-3.2, AC-3.3, AC-3.4, AC-3.5. Endpoint `GET /api/search/map` sdílející query builder s `/api/search` (zaokrouhlení souřadnic na ~300 m u `show_exact_location = false`), `MapView` (MapLibre GL v5 + `supercluster`, dynamický import bez SSR mimo hlavní bundle), fokusovatelné `PricePin` (`glass-3`) a `ClusterPin` (fialové kruhy s prstencem ve 3 velikostech), `MapPreviewCard`, ovládací prvky v `glass-3`, přepínač _Hledat při pohybu mapy_ se synchronizací `bbox` do URL, desktop split-view 55/45 a mobilní celoobrazovková mapa s bottom sheetem, zachycení výpadku dlaždic (QA A20), `ListingLocationMap` připravena pro detail.
+**Odchylky:** Použita stabilní verze `maplibre-gl@^5.5.0` (5.24.1) místo v6 kvůli kompatibilitě workeru v Next.js 15 Webpacku (zapsáno v `docs/DECISIONS.md`).
+**Měření:** `pnpm check:tokens` OK (67 souborů), `typecheck` OK, `lint` OK, `test` 23/23, `test:e2e` 10/10 (QA A9–A12, A20, axe na výpisu s mapou 0 kritických/vážných chyb). Vizuální rubrika `DESIGN.md` kap. 13: 5/5; 0 chyb v konzoli a `overflow=false` na 390/768/1280/1536 px.
+**Snímky:** `docs/screenshots/etapa-5/` (`map-390.png`, `map-768.png`, `map-1280.png`, `map-1536.png`).
+**Zbývá / známé problémy:** Žádné.
+**Další krok:** Etapa 6 — Detail nabídky (`/nemovitost/[slug]`, galerie + lightbox, poptávka + outbox, odhalení telefonu, hypoteční kalkulačka, nahlášení, SEO + JSON-LD + dynamický OG obrázek).
+
 ## Etapa 4 — Vyhledávání a výpis (2026-11-25 23:33)
 
 **Hotovo:** AC-2.1, AC-2.2, AC-2.3, AC-2.4, AC-2.5, AC-2.6, AC-2.7 (a AC-2.8 výzva k přihlášení do etapy 7). Endpoint `GET /api/search`, URL jako jediný zdroj pravdy přes `nuqs` (`NuqsAdapter` + `nuqs/server` parsery), SSR první výsledek s kanonickým URL a `noindex` při > 2 filtrech, sticky `FilterBar` (`glass-1`), `FilterDrawer` (`glass-3`) se všemi filtry z AC-2.1, cenový rozsah s histogramem z DB, 5 způsobů řazení, přepínač mřížka/seznam, stránkování po 24 bez layout shiftu, prázdný stav s _Zrušit filtry_.
