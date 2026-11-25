@@ -10,6 +10,7 @@ async function main(): Promise<void> {
   }
 
   const dbName = assertSafeDevOrTestDatabase(databaseUrl);
+  const started = Date.now();
   console.log(`Resetuji databázi "${dbName}"...`);
 
   const pool = new Pool({ connectionString: databaseUrl });
@@ -26,7 +27,8 @@ async function main(): Promise<void> {
   }
 
   execSync("pnpm db:migrate", { stdio: "inherit" });
-  console.log("Databáze vyčištěna a migrace aplikovány.");
+  execSync("pnpm db:seed", { stdio: "inherit" });
+  console.log(`db:reset dokončen za ${((Date.now() - started) / 1000).toFixed(2)} s.`);
 }
 
 main().catch((err) => {
