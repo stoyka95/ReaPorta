@@ -26,6 +26,7 @@ Tento repozitář je **zadání pro AI agenta** (Google Antigravity). Obsahuje k
 | [`docs/QA-CHECKLIST.md`](docs/QA-CHECKLIST.md) | scénáře pro ověření v prohlížeči |
 | [`docs/OPEN-QUESTIONS.md`](docs/OPEN-QUESTIONS.md) | předem zodpovězená rozhodnutí a místo pro nové otázky |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) · [`docs/STAGE_LOG.md`](docs/STAGE_LOG.md) | rozhodnutí a deník etap (vyplňuje agent) |
+| [`docs/MODELS.md`](docs/MODELS.md) | který model a effort v Antigravity zvolit pro kterou etapu |
 | [`prompts/`](prompts) | úvodní prompty pro oba běhy, revizi designu a krizové situace |
 | [`.agents/`](.agents) | pravidla (`rules/`) a zkratky (`workflows/`) pro Antigravity |
 
