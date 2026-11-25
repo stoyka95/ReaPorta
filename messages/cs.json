@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "title": "ReaPorta — Realitní portál",
+    "description": "Hledání a inzerce nemovitostí k prodeji a pronájmu v České republice."
+  },
+  "stage0": {
+    "eyebrow": "Připravujeme portál",
+    "heading": "Základ aplikace je připraven.",
+    "body": "Prostředí, databáze i nástrojový řetězec jsou aktivní. Následuje databázové schéma a design systém."
+  }
+}

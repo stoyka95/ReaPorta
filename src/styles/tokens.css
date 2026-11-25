@@ -1,0 +1,120 @@
+:root {
+  /* Neutrální šedá */
+  --gray-0: #ffffff;
+  --gray-25: #fafafb;
+  --gray-50: #f4f4f6;
+  --gray-100: #ebebef;
+  --gray-200: #dddde3;
+  --gray-300: #c5c5cf;
+  --gray-400: #9c9caa;
+  --gray-500: #6a6a7a;
+  --gray-600: #565665;
+  --gray-700: #3e3e4b;
+  --gray-800: #272731;
+  --gray-900: #17171e;
+  --gray-950: #0e0e13;
+
+  /* Fialový akcent */
+  --violet-50: #f7f4ff;
+  --violet-100: #ece6ff;
+  --violet-200: #daceff;
+  --violet-300: #c1aeff;
+  --violet-400: #a184ff;
+  --violet-500: #8560f5;
+  --violet-600: #6d3fe0;
+  --violet-700: #5b2fc2;
+  --violet-800: #482699;
+  --violet-900: #331c6e;
+
+  /* Sémantické stavy */
+  --success: #1f7a52;
+  --success-bg: #e6f4ec;
+  --warning: #9a5b00;
+  --warning-bg: #fff3dc;
+  --danger: #c42b43;
+  --danger-bg: #fde8eb;
+
+  /* PENB tečky (A–G) */
+  --penb-a: #1f7a52;
+  --penb-b: #5a9a3b;
+  --penb-c: #a3a82a;
+  --penb-d: #d4a017;
+  --penb-e: #e07b1f;
+  --penb-f: #d4472b;
+  --penb-g: #b3263e;
+
+  /* Sémantické role */
+  --bg-page: var(--gray-50);
+  --bg-surface: var(--gray-0);
+  --bg-subtle: var(--gray-25);
+  --bg-hover: var(--gray-100);
+  --text-strong: var(--gray-900);
+  --text: var(--gray-700);
+  --text-muted: var(--gray-500);
+  --text-on-accent: #ffffff;
+  --border-subtle: var(--gray-100);
+  --border: var(--gray-200);
+  --border-strong: var(--gray-300);
+  --accent: var(--violet-600);
+  --accent-hover: var(--violet-700);
+  --accent-soft: var(--violet-100);
+  --accent-text: var(--violet-700);
+  --focus-ring: var(--violet-500);
+  --focus-halo: rgb(133 96 245 / 0.18);
+
+  /* Sklo (glass) */
+  --glass-1: rgb(255 255 255 / 0.62);
+  --glass-2: rgb(255 255 255 / 0.74);
+  --glass-3: rgb(255 255 255 / 0.86);
+  --glass-fallback: rgb(255 255 255 / 0.94);
+  --glass-reduced: rgb(255 255 255 / 0.97);
+  --glass-border: rgb(255 255 255 / 0.72);
+  --glass-hairline: rgb(23 23 30 / 0.06);
+  --glass-highlight: rgb(255 255 255 / 0.9);
+  --glass-accent-highlight: rgb(255 255 255 / 0.25);
+  --glass-blur-1: 18px;
+  --glass-blur-2: 24px;
+  --glass-blur-3: 32px;
+
+  /* Aurora a scrimy */
+  --aurora-1: rgb(133 96 245 / 0.14);
+  --aurora-2: rgb(193 174 255 / 0.22);
+  --aurora-3: rgb(218 206 255 / 0.3);
+  --scrim-photo: rgb(14 14 19 / 0.55);
+  --scrim-backdrop: rgb(14 14 19 / 0.45);
+  --scrim-lightbox: rgb(14 14 19 / 0.92);
+  --cluster-bg: rgb(109 63 224 / 0.9);
+  --cluster-ring: rgb(133 96 245 / 0.25);
+
+  /* Stíny (tónované do fialové) */
+  --shadow-1: 0 1px 2px rgb(40 25 90 / 0.06), 0 1px 1px rgb(40 25 90 / 0.04);
+  --shadow-2: 0 2px 6px rgb(40 25 90 / 0.07), 0 8px 20px rgb(40 25 90 / 0.06);
+  --shadow-3: 0 4px 12px rgb(40 25 90 / 0.08), 0 16px 40px rgb(40 25 90 / 0.1);
+  --shadow-4: 0 8px 24px rgb(40 25 90 / 0.1), 0 32px 80px rgb(40 25 90 / 0.16);
+  --shadow-accent: 0 6px 18px rgb(109 63 224 / 0.32);
+
+  /* Poloměry */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-pill: 999px;
+
+  /* Z-index vrstvy */
+  --z-base: 0;
+  --z-sticky: 20;
+  --z-dropdown: 40;
+  --z-drawer: 50;
+  --z-modal: 60;
+  --z-toast: 70;
+  --z-tooltip: 80;
+
+  /* Pohyb */
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}

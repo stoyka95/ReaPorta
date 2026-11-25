@@ -1,0 +1,63 @@
+{
+  "name": "reaporta",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/db-migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "db:reset": "tsx scripts/db-reset.ts",
+    "photos:generate": "tsx scripts/generate-placeholder-photos.ts",
+    "job:alerts": "tsx scripts/job-alerts.ts",
+    "check:tokens": "tsx scripts/check-tokens.ts",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.41.0",
+    "lucide-react": "^0.511.0",
+    "next": "^15.3.2",
+    "next-intl": "^4.1.0",
+    "pg": "^8.15.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zod": "^3.25.28"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@eslint/eslintrc": "^3.3.1",
+    "@playwright/test": "^1.52.0",
+    "@tailwindcss/postcss": "^4.1.6",
+    "@types/node": "^22.15.17",
+    "@types/pg": "^8.11.14",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.4",
+    "dotenv": "^16.5.0",
+    "drizzle-kit": "^0.31.1",
+    "eslint": "^9.26.0",
+    "eslint-config-next": "^15.3.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^4.1.6",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}
