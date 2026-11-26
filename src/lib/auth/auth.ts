@@ -114,7 +114,7 @@ function createAuthInstance() {
     },
     advanced: {
       cookiePrefix: "reaporta",
-      useSecureCookies: process.env.NODE_ENV === "production",
+      useSecureCookies: getAppUrl().startsWith("https://"),
       defaultCookieAttributes: {
         httpOnly: true,
         sameSite: "lax",

@@ -25,7 +25,7 @@ export async function StaticArticlePage({
   const t = await getTranslations("static");
 
   return (
-    <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+    <div className="mx-auto max-w-4xl space-y-8 px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
       <Breadcrumbs items={[{ label: "Úvod", href: "/" }, { label: title }]} />
 
       <header className="space-y-3">
@@ -55,6 +55,6 @@ export async function StaticArticlePage({
           </section>
         ))}
       </Card>
-    </main>
+    </div>
   );
 }

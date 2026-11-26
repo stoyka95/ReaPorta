@@ -19,7 +19,7 @@ const BENEFITS = [
 
 export default function AdvertisePage() {
   return (
-    <main className="mx-auto max-w-5xl space-y-10 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-5xl space-y-10 px-4 py-12 sm:px-6 lg:px-8">
       <GlassPanel level={2} padding="lg" radius="2xl" className="space-y-5">
         <p className="type-eyebrow text-accent-text">Pro makléře i soukromé vlastníky</p>
         <h1 className="type-h1 text-strong max-w-2xl">
@@ -27,15 +27,15 @@ export default function AdvertisePage() {
         </h1>
         <p className="type-body-lg max-w-2xl text-body">
           {nbsp(
-            "Registrace účtu makléře a správa inzerátů bude plně spuštěna v navazující etapě aplikace. Už nyní si můžete prohlédnout, jak vypadají nabídky v katalogu.",
+            "Vytvořte si makléřský účet a během několika minut přidejte první nabídku s mapou, galerií fotografií a přehledem poptávek i statistik.",
           )}
         </p>
         <div className="flex flex-wrap gap-3 pt-2">
           <Button variant="primary" size="lg" asChild>
-            <Link href="/prodej/vse">Prohlédnout katalog</Link>
+            <Link href="/dashboard/inzeraty/novy">Vložit inzerát</Link>
           </Button>
           <Button variant="secondary" size="lg" asChild>
-            <Link href="/kontakt">Kontaktovat tým</Link>
+            <Link href="/registrace">Vytvořit účet makléře</Link>
           </Button>
         </div>
       </GlassPanel>
@@ -55,6 +55,6 @@ export default function AdvertisePage() {
           ))}
         </ul>
       </Card>
-    </main>
+    </div>
   );
 }

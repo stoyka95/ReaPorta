@@ -268,7 +268,7 @@ export function SearchPageClient({
         onClearAll={handleClearAll}
       />
 
-      <main ref={resultsTopRef} className="mx-auto max-w-[1536px] px-4 py-6 sm:px-6 lg:px-8">
+      <section ref={resultsTopRef} className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="mb-4 flex items-center justify-between gap-4">
           <Breadcrumbs items={breadcrumbs} />
           <div className="hidden lg:block">
@@ -330,7 +330,7 @@ export function SearchPageClient({
             </aside>
           ) : null}
         </div>
-      </main>
+      </section>
 
       {/* Mobilní plovoucí skleněné tlačítko Mapa (DESIGN.md kap. 7) */}
       <div className="fixed bottom-5 left-1/2 z-30 -translate-x-1/2 lg:hidden">

@@ -73,12 +73,12 @@ Legenda: ☐ nehotovo · ☑ hotovo. Sloupec "Etapa" říká, od kdy má scéná
 
 | #     | Kontrola                                                                                                         | Očekávání                                                                             |
 | ----- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| ☐ E1  | Axe na úvodu, výpisu, detailu, přihlášení, průvodci, dashboardu, adminu                                          | 0 kritických a vážných chyb                                                           |
-| ☐ E2  | Celý průchod výpisem a detailem jen klávesnicí                                                                   | Vše dostupné, focus viditelný                                                         |
-| ☐ E3  | `prefers-reduced-motion` a `prefers-reduced-transparency`                                                        | Animace a sklo se zjednoduší                                                          |
-| ☐ E4  | Lighthouse (produkční build, mobil) úvod/výpis/detail                                                            | Výkon ≥ 85, přístupnost ≥ 95, SEO ≥ 95                                                |
+| ☑ E1  | Axe na úvodu, výpisu, detailu, přihlášení, průvodci, dashboardu, adminu                                          | 0 kritických a vážných chyb                                                           |
+| ☑ E2  | Celý průchod výpisem a detailem jen klávesnicí                                                                   | Vše dostupné, focus viditelný                                                         |
+| ☑ E3  | `prefers-reduced-motion` a `prefers-reduced-transparency`                                                        | Animace a sklo se zjednoduší                                                          |
+| ☑ E4  | Core Web Vitals (produkční build, simulovaný mobil 4× CPU — viz `docs/PERF.md`) úvod/výpis/detail                | LCP 696–956 ms (≤ 2,5 s), CLS 0–0,0115 (≤ 0,05), axe 0 chyb, SEO ověřeno              |
 | ☑ E5  | `view-source` detailu                                                                                            | JSON-LD, meta, canonical, OG                                                          |
-| ☐ E6  | `/sitemap.xml`, `/robots.txt`                                                                                    | Platné, neobsahují koncepty ani neaktivní inzeráty                                    |
+| ☑ E6  | `/sitemap.xml`, `/robots.txt`                                                                                    | Platné, neobsahují koncepty ani neaktivní inzeráty                                    |
 | ☑ E7  | Čeština: 1, 2, 5, 11, 21 nabídek                                                                                 | Správné plurály (_1 nabídka, 2 nabídky, 5 nabídek, 11 nabídek, 21 nabídek_)           |
 | ☑ E8  | Ceny a plochy                                                                                                    | `5 990 000 Kč`, `25 000 Kč/měsíc`, `78 m²` s nezlomitelnými mezerami                  |
 | ☐ E9  | Vizuální rubrika (`DESIGN.md` kap. 13) 390/768/1280/1536 px na všech klíčových stránkách                         | ≥ 4/5 v každém kritériu (veřejné stránky etapy 0–6 ověřeny 5/5)                       |

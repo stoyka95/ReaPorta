@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Building2, Car, Home, Store, Trees } from "lucide-react";
@@ -5,11 +6,16 @@ import { getTranslations } from "next-intl/server";
 import { HeroSearchPanel } from "@/components/home/HeroSearchPanel";
 import { ListingCard } from "@/components/listing/ListingCard";
 import { Button, GlassPanel } from "@/components/ui";
+import { BRAND } from "@/config/brand";
 import { getFeaturedAndNewListings, getPortalStats } from "@/db/queries/listings";
 import { getPopularCities } from "@/db/queries/locations";
 import { formatListingCount, formatNumber, nbsp } from "@/lib/format";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const CITY_BACKDROPS = [
   "/media/pool/exterior-01-card.webp",
@@ -38,8 +44,36 @@ export default async function HomePage() {
     { key: "other", href: "/prodej/ostatni", icon: Car },
   ] as const;
 
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "");
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        name: BRAND.name,
+        url: baseUrl,
+        logo: `${baseUrl}/brand/icon-512.png`,
+        email: BRAND.email,
+      },
+      {
+        "@type": "WebSite",
+        name: BRAND.name,
+        url: baseUrl,
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${baseUrl}/prodej/vse?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
+
   return (
-    <main className="mx-auto max-w-7xl space-y-16 px-4 pt-8 pb-8 sm:px-6 lg:space-y-24 lg:px-8 lg:pt-14">
+    <div className="mx-auto max-w-7xl space-y-16 px-4 pt-8 pb-8 sm:px-6 lg:space-y-24 lg:px-8 lg:pt-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* 1. Hero sekce */}
       <section className="grid items-center gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:gap-12">
         <div className="space-y-6">
@@ -231,6 +265,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

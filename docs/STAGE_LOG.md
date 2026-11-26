@@ -16,6 +16,22 @@ Formát záznamu:
 
 ---
 
+## Etapa 11 — SEO, přístupnost, výkon a bezpečnost (2026-11-26 09:12)
+
+**Hotovo:** AC-9.1, AC-9.2, AC-9.3, AC-9.4, AC-9.5, AC-9.6, AC-9.7. Dynamická `/sitemap.xml` (`src/app/sitemap.ts` + `src/db/queries/seo.ts`: pouze aktivní inzeráty + makléři + agentury + kategorie × top města, bez konceptů a neaktivních), `/robots.txt` (`src/app/robots.ts`), JSON-LD `Organization` + `WebSite` a `canonical` na `/`, bezpečnostní hlavičky a CSP v `next.config.ts` (`Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`, v prod `Strict-Transport-Security`), oprava `useSecureCookies` na `APP_URL.startsWith("https://")` pro bezproblémový chod lokálního produkčního buildu i HTTPS nasazení, odstranění vnořených `<main>` landmarků (každá stránka má nyní právě jeden `<main>`), skript `pnpm check:secrets` (`scripts/check-secrets.ts`), `EXPLAIN (ANALYZE, BUFFERS)` benchmark nad 400 i 10 000 inzeráty (`scripts/perf-explain.ts`), měření produkčních Core Web Vitals (`scripts/perf-vitals.ts`) a podrobná zpráva v `docs/PERF.md`.
+**Odchylky:** First Load JS úvodní stránky `/` je `188 kB` gzip (+8 kB nad rozpočtem `180 kB` kvůli globálním providerům v kořenovém layoutu; samotná routa má `1,85 kB` a `maplibre-gl` v ní není); výpis má `216 kB` (pod rozpočtem `260 kB`). Místo instalace externího balíčku Lighthouse bylo měření LCP/CLS/FCP/Long Tasks provedeno přímo nad produkčním buildem (`pnpm start`) pomocí Chromium `PerformanceObserver` + 4× CPU mobilního zpomalení (viz `docs/PERF.md`).
+**Měření:**
+
+- `pnpm check:tokens` OK (126 souborů), `pnpm check:secrets` OK (287 souborů, 0 tajemství), `typecheck` OK, `lint` OK, `test` 41/41.
+- `EXPLAIN (ANALYZE, BUFFERS)` nad **10 000 aktivními inzeráty** v `reaporta_test`: prodej bytů Praha `8,92 ms`, fulltext + vybavení `10,05 ms`, mapa bbox `2,96 ms`, našeptávač lokalit `0,66 ms`, detail slugu `0,14 ms` (cíl ≤ `300 ms` splněn s 30× rezervou).
+- Produkční build (`pnpm start`, simulovaný mobil 390×844, 4× CPU): `/` LCP `956 ms` / CLS `0`, `/prodej/byty` LCP `920 ms` / CLS `0,0115`, `/nemovitost/[slug]` LCP `696 ms` / CLS `0` (cíle LCP ≤ 2 500 ms, CLS ≤ 0,05 splněny).
+- `e2e/cross-cutting.spec.ts` nad produkčním serverem: **4/4 prošly** (QA E1 axe 0 chyb na 7 klíčových stránkách, E2 klávesnicová navigace, E3 `prefers-reduced-motion` + `prefers-reduced-transparency`, E6 `/robots.txt` + `/sitemap.xml` + bezpečnostní hlavičky).
+- `pnpm audit --prod`: 7 upozornění v `maplibre-gl`, `drizzle-orm`, `zod` a tranzitivním `postcss` — všechna zdokumentována s posouzením dopadu a doporučením aktualizace v `docs/PERF.md`.
+  **Vizuální rubrika (`DESIGN.md` kap. 13):** Etapa 11 neměnila vizuální komponenty (kromě aktualizace textu a CTA na `/inzerce` a sémantiky `<main>`); finální 4rozlišová vizuální QA všech klíčových stránek proběhne v etapě 12.
+  **Snímky:** Beze změny UI rozvržení (finální sada snímků bude pořízena v etapě 12).
+  **Zbývá / známé problémy:** Při 4× softwarovém CPU zpomalení vykazuje počáteční hydratace 2 dlouhé úlohy (`415–589 ms`); bez throttlingu pod `150 ms` (zapsáno v `docs/PERF.md`).
+  **Další krok:** Etapa 12 — Kompletní Playwright E2E běh celé sady, ověření čisté instalace (`db:reset` + `build`), finální vizuální QA ve 4 rozlišeních, aktualizace `README.md`, vytvoření `docs/DEPLOY.md`, úklid a _Závěrečná zpráva_.
+
 ## Etapa 10 — Administrace (`/admin`, moderace, uživatelé, agentury, nahlášení, lokality, audit log) (2026-11-26 08:50)
 
 **Hotovo:** AC-8.1, AC-8.2, AC-8.3, AC-8.4, AC-8.5, AC-8.6, AC-8.7. Serverové dotazy a mutace `src/db/queries/admin.ts` s povinným zápisem každé admin akce do `audit_log`; API endpointy `/api/admin/moderation/[id]`, `/api/admin/users/[id]`, `/api/admin/agencies`, `/api/admin/agencies/[id]`, `/api/admin/agencies/assign`, `/api/admin/reports/[id]`, `/api/admin/locations/[id]` (všechny vynucují `requireAdmin()` → 401/403); `src/app/api/auth/[...all]/route.ts` blokuje přihlášení uživatelů s `blockedAt !== null` (403 `ACCOUNT_BLOCKED`) a zablokování okamžitě ruší aktivní záznamy v `sessions`; stránky `/admin` (KPI + auditní protokol), `/admin/moderace` (fronta `pending`, náhled, _Schválit_ / _Zamítnout s důvodem_ s e-mailem do `email_outbox`), `/admin/uzivatele` (vyhledávání, změna role, blokování/odblokování, aktivita), `/admin/agentury` (CRUD kanceláří + přiřazení makléřů), `/admin/nahlaseni` (skrytí inzerátu / zamítnutí nahlášení) a `/admin/lokality` (hierarchie + úprava názvu a souřadnic).

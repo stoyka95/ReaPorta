@@ -19,6 +19,7 @@
     "job:alerts": "tsx scripts/job-alerts.ts",
     "job:expire": "tsx scripts/job-expire.ts",
     "check:tokens": "tsx scripts/check-tokens.ts",
+    "check:secrets": "tsx scripts/check-secrets.ts",
     "prepare": "husky"
   },
   "lint-staged": {

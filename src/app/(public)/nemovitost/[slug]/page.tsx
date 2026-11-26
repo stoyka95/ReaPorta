@@ -269,7 +269,7 @@ export default async function ListingDetailPage({ params }: DetailPageProps) {
     .filter(Boolean);
 
   return (
-    <main className="mx-auto max-w-7xl space-y-8 px-4 pt-6 pb-24 sm:px-6 lg:px-8 lg:pb-16">
+    <div className="mx-auto max-w-7xl space-y-8 px-4 pt-6 pb-24 sm:px-6 lg:px-8 lg:pb-16">
       {/* JSON-LD strukturovaná data (AC-4.9) */}
       <script
         type="application/ld+json"
@@ -531,6 +531,6 @@ export default async function ListingDetailPage({ params }: DetailPageProps) {
 
       {/* Mobilní lepicí spodní lišta (DESIGN.md kap. 7) */}
       <MobileContactBar priceText={priceText} />
-    </main>
+    </div>
   );
 }
