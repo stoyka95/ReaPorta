@@ -34,6 +34,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const cloned = req.clone();
+    const body = (await cloned.json().catch(() => null)) as { email?: string } | null;
+    const email = body?.email?.trim();
+    if (email) {
+      const db = getDb();
+      const [u] = await db
+        .select({ id: users.id, blockedAt: users.blockedAt, deletedAt: users.deletedAt })
+        .from(users)
+        .where(eq(users.email, email))
+        .limit(1);
+      if (u && (u.blockedAt !== null || u.deletedAt !== null)) {
+        return NextResponse.json(
+          {
+            code: "ACCOUNT_BLOCKED",
+            message:
+              "Váš účet byl zablokován správcem a nelze se k němu přihlásit. V případě dotazů nás kontaktujte.",
+          },
+          { status: 403 },
+        );
+      }
+    }
+
     const res = await handler.POST(req);
     if (res.ok) {
       await resetRateLimitKey(key);

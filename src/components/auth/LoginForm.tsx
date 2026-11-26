@@ -70,6 +70,13 @@ export function LoginForm({ nextPath, favoriteListingId }: LoginFormProps) {
       }
 
       if (!res.ok) {
+        if (data.code === "ACCOUNT_BLOCKED") {
+          setFormError(
+            data.message ??
+              "Váš účet byl zablokován správcem a nelze se k němu přihlásit. V případě dotazů nás kontaktujte.",
+          );
+          return;
+        }
         if (data.code === "EMAIL_NOT_VERIFIED") {
           setFormError(
             "Váš e-mail ještě není ověřen. Otevřete prosím ověřovací odkaz, který jsme vám poslali.",

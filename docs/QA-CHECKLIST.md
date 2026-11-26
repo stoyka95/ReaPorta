@@ -52,7 +52,7 @@ Legenda: ☐ nehotovo · ☑ hotovo. Sloupec "Etapa" říká, od kdy má scéná
 | ☑ C3  | V průvodci přetáhnout pořadí fotek, nastavit úvodní                                 | Pořadí se uloží, úvodní se zobrazí na kartě                                |
 | ☑ C4  | Zavřít prohlížeč uprostřed průvodce, vrátit se                                      | Koncept zůstal, pokračuje se od posledního kroku                           |
 | ☑ C5  | Odeslat do moderace                                                                 | Stav `pending`, na veřejném webu není                                      |
-| ☐ C6  | Po schválení adminem                                                                | Inzerát je na výpisu a na mapě                                             |
+| ☑ C6  | Po schválení adminem                                                                | Inzerát je na výpisu a na mapě                                             |
 | ☑ C7  | Změnit cenu aktivního inzerátu                                                      | Historie ceny, štítek _Zlevněno_ při snížení                               |
 | ☑ C8  | Pozastavit, obnovit, duplikovat, smazat                                             | Funguje; smazání vyžaduje potvrzení a odstraní soubory                     |
 | ☑ C9  | IDOR: otevřít `/dashboard/inzeraty/<id cizího>/upravit`                             | 403/404, žádná data                                                        |
@@ -63,11 +63,11 @@ Legenda: ☐ nehotovo · ☑ hotovo. Sloupec "Etapa" říká, od kdy má scéná
 
 | #    | Scénář                                         | Očekávání                                          |
 | ---- | ---------------------------------------------- | -------------------------------------------------- |
-| ☐ D1 | Přihlásit `admin@reaporta.test`                | Přehled s frontou                                  |
-| ☐ D2 | Schválit a zamítnout inzerát (s důvodem)       | E-mail makléři, stav se změní, záznam v audit logu |
-| ☐ D3 | Zablokovat uživatele                           | Nemůže se přihlásit                                |
-| ☐ D4 | Vyřešit nahlášení (skrýt inzerát)              | Inzerát zmizí z veřejných výpisů                   |
-| ☐ D5 | Přihlásit běžného uživatele a otevřít `/admin` | 403 stránka v designu aplikace                     |
+| ☑ D1 | Přihlásit `admin@reaporta.test`                | Přehled s frontou                                  |
+| ☑ D2 | Schválit a zamítnout inzerát (s důvodem)       | E-mail makléři, stav se změní, záznam v audit logu |
+| ☑ D3 | Zablokovat uživatele                           | Nemůže se přihlásit                                |
+| ☑ D4 | Vyřešit nahlášení (skrýt inzerát)              | Inzerát zmizí z veřejných výpisů                   |
+| ☑ D5 | Přihlásit běžného uživatele a otevřít `/admin` | 403 stránka v designu aplikace                     |
 
 ## E. Průřezové
 
