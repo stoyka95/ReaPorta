@@ -63,7 +63,7 @@ export function ListingCard({
       className={cn(
         "group relative min-w-0 rounded-xl border bg-surface p-2 shadow-card transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-float",
         highlighted ? "border-accent ring-2 ring-violet-300" : "border-line-subtle",
-        isHorizontal ? "grid grid-cols-1 gap-3 sm:grid-cols-[40%_1fr]" : "flex flex-col",
+        isHorizontal ? "grid grid-cols-1 gap-3 sm:grid-cols-[40%_1fr]" : "flex h-full flex-col",
       )}
     >
       {/* Obrázková část (4:3) */}
@@ -176,23 +176,24 @@ export function ListingCard({
           </p>
         </div>
 
-        {visibleAmenities.length > 0 ? (
-          <div className="mt-3 flex flex-wrap items-center gap-1.5">
-            {visibleAmenities.map((amenity) => (
-              <span
-                key={amenity}
-                className="inline-flex h-6 items-center rounded-pill bg-subtle border border-line-subtle px-2.5 type-caption text-body"
-              >
-                {AMENITY_LABELS[amenity] ?? amenity}
-              </span>
-            ))}
-            {overflowCount > 0 ? (
-              <span className="inline-flex h-6 items-center rounded-pill bg-subtle px-2 type-caption text-muted tnum">
-                +{overflowCount}
-              </span>
-            ) : null}
-          </div>
-        ) : null}
+        <div
+          className="mt-3 flex h-6 flex-nowrap items-center gap-1.5 overflow-hidden"
+          aria-hidden={visibleAmenities.length === 0 ? true : undefined}
+        >
+          {visibleAmenities.map((amenity) => (
+            <span
+              key={amenity}
+              className="inline-flex h-6 shrink-0 items-center whitespace-nowrap rounded-pill border border-line-subtle bg-subtle px-2.5 type-caption text-body"
+            >
+              {AMENITY_LABELS[amenity] ?? amenity}
+            </span>
+          ))}
+          {overflowCount > 0 ? (
+            <span className="inline-flex h-6 shrink-0 items-center whitespace-nowrap rounded-pill bg-subtle px-2 type-caption text-muted tnum">
+              +{overflowCount}
+            </span>
+          ) : null}
+        </div>
       </div>
     </article>
   );
