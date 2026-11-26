@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { CheckCircle2, Heart, Phone, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
@@ -155,12 +156,26 @@ export function ContactCard({
         <div className="flex items-center gap-3.5 min-w-0">
           <Avatar name={agent?.displayName ?? "Inzerent"} size="md" />
           <div className="min-w-0 space-y-0.5">
-            <p className="truncate type-body font-semibold text-strong">
-              {agent?.displayName ?? "Makléř"}
-            </p>
-            <p className="truncate type-small text-muted">
-              {agency ? agency.name : t("privateSeller")}
-            </p>
+            {agent ? (
+              <Link
+                href={`/makleri/${agent.slug}`}
+                className="block truncate type-body font-semibold text-strong hover:text-accent-text hover:underline"
+              >
+                {agent.displayName}
+              </Link>
+            ) : (
+              <p className="truncate type-body font-semibold text-strong">Makléř</p>
+            )}
+            {agency ? (
+              <Link
+                href={`/agentury/${agency.slug}`}
+                className="block truncate type-small text-muted hover:text-accent-text hover:underline"
+              >
+                {agency.name}
+              </Link>
+            ) : (
+              <p className="truncate type-small text-muted">{t("privateSeller")}</p>
+            )}
             {agent?.verifiedAt ? (
               <Badge variant="success" className="mt-1">
                 Ověřený makléř

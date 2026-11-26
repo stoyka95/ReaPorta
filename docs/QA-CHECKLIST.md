@@ -56,8 +56,8 @@ Legenda: ☐ nehotovo · ☑ hotovo. Sloupec "Etapa" říká, od kdy má scéná
 | ☑ C7  | Změnit cenu aktivního inzerátu                                                      | Historie ceny, štítek _Zlevněno_ při snížení                               |
 | ☑ C8  | Pozastavit, obnovit, duplikovat, smazat                                             | Funguje; smazání vyžaduje potvrzení a odstraní soubory                     |
 | ☑ C9  | IDOR: otevřít `/dashboard/inzeraty/<id cizího>/upravit`                             | 403/404, žádná data                                                        |
-| ☐ C10 | Poptávky: označit jako přečtenou, zodpovězenou, archivovat                          | Funguje, počítadla v menu                                                  |
-| ☐ C11 | Veřejný profil makléře a agentury                                                   | Zobrazí jen aktivní nabídky                                                |
+| ☑ C10 | Poptávky: označit jako přečtenou, zodpovězenou, archivovat                          | Funguje, počítadla v menu                                                  |
+| ☑ C11 | Veřejný profil makléře a agentury                                                   | Zobrazí jen aktivní nabídky                                                |
 
 ## D. Admin (od etapy 10)
 

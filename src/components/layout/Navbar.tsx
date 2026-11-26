@@ -39,8 +39,12 @@ export function Navbar() {
   const links = [
     { href: "/prodej/vse", label: t("sale"), active: pathname.startsWith("/prodej") },
     { href: "/pronajem/vse", label: t("rent"), active: pathname.startsWith("/pronajem") },
+    {
+      href: "/makleri",
+      label: t("agents"),
+      active: pathname.startsWith("/makleri") || pathname.startsWith("/agentury"),
+    },
     { href: "/inzerce", label: t("advertise"), active: pathname.startsWith("/inzerce") },
-    { href: "/o-nas", label: "O nás", active: pathname === "/o-nas" },
   ];
 
   async function handleSignOut() {
