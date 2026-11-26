@@ -17,6 +17,7 @@
     "db:reset": "tsx scripts/db-reset.ts",
     "photos:generate": "tsx scripts/generate-placeholder-photos.ts",
     "job:alerts": "tsx scripts/job-alerts.ts",
+    "job:expire": "tsx scripts/job-expire.ts",
     "check:tokens": "tsx scripts/check-tokens.ts",
     "prepare": "husky"
   },

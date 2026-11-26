@@ -15,14 +15,14 @@ export interface StepperProps {
 export function Stepper({ steps, currentStep, className }: StepperProps) {
   return (
     <nav aria-label="Kroky formuláře" className={cn("w-full", className)}>
-      <ol className="flex items-center gap-2 overflow-x-auto pb-1">
+      <ol className="flex flex-wrap items-center gap-x-2 gap-y-2.5">
         {steps.map((step, idx) => {
           const done = idx < currentStep;
           const active = idx === currentStep;
           return (
             <li
               key={step.id}
-              className="flex flex-1 items-center gap-2 min-w-fit"
+              className="flex items-center gap-2"
               aria-current={active ? "step" : undefined}
             >
               <span

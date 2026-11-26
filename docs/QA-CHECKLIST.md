@@ -47,15 +47,15 @@ Legenda: ☐ nehotovo · ☑ hotovo. Sloupec "Etapa" říká, od kdy má scéná
 
 | #     | Scénář                                                                              | Očekávání                                                                  |
 | ----- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| ☐ C1  | Přihlásit `makler@reaporta.test`, otevřít `/dashboard`                              | Přehled s čísly a grafem                                                   |
-| ☐ C2  | Průvodce: vložit byt s 8 fotkami (jedna 15 MB, jedna `.txt` přejmenovaná na `.jpg`) | Velký soubor odmítnut s hláškou, falešný obrázek odmítnut, ostatní nahrány |
-| ☐ C3  | V průvodci přetáhnout pořadí fotek, nastavit úvodní                                 | Pořadí se uloží, úvodní se zobrazí na kartě                                |
-| ☐ C4  | Zavřít prohlížeč uprostřed průvodce, vrátit se                                      | Koncept zůstal, pokračuje se od posledního kroku                           |
-| ☐ C5  | Odeslat do moderace                                                                 | Stav `pending`, na veřejném webu není                                      |
+| ☑ C1  | Přihlásit `makler@reaporta.test`, otevřít `/dashboard`                              | Přehled s čísly a grafem                                                   |
+| ☑ C2  | Průvodce: vložit byt s 8 fotkami (jedna 15 MB, jedna `.txt` přejmenovaná na `.jpg`) | Velký soubor odmítnut s hláškou, falešný obrázek odmítnut, ostatní nahrány |
+| ☑ C3  | V průvodci přetáhnout pořadí fotek, nastavit úvodní                                 | Pořadí se uloží, úvodní se zobrazí na kartě                                |
+| ☑ C4  | Zavřít prohlížeč uprostřed průvodce, vrátit se                                      | Koncept zůstal, pokračuje se od posledního kroku                           |
+| ☑ C5  | Odeslat do moderace                                                                 | Stav `pending`, na veřejném webu není                                      |
 | ☐ C6  | Po schválení adminem                                                                | Inzerát je na výpisu a na mapě                                             |
-| ☐ C7  | Změnit cenu aktivního inzerátu                                                      | Historie ceny, štítek _Zlevněno_ při snížení                               |
-| ☐ C8  | Pozastavit, obnovit, duplikovat, smazat                                             | Funguje; smazání vyžaduje potvrzení a odstraní soubory                     |
-| ☐ C9  | IDOR: otevřít `/dashboard/inzeraty/<id cizího>/upravit`                             | 403/404, žádná data                                                        |
+| ☑ C7  | Změnit cenu aktivního inzerátu                                                      | Historie ceny, štítek _Zlevněno_ při snížení                               |
+| ☑ C8  | Pozastavit, obnovit, duplikovat, smazat                                             | Funguje; smazání vyžaduje potvrzení a odstraní soubory                     |
+| ☑ C9  | IDOR: otevřít `/dashboard/inzeraty/<id cizího>/upravit`                             | 403/404, žádná data                                                        |
 | ☐ C10 | Poptávky: označit jako přečtenou, zodpovězenou, archivovat                          | Funguje, počítadla v menu                                                  |
 | ☐ C11 | Veřejný profil makléře a agentury                                                   | Zobrazí jen aktivní nabídky                                                |
 

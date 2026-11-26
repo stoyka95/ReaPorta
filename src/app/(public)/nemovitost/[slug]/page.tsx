@@ -80,12 +80,23 @@ export async function generateMetadata({ params }: DetailPageProps): Promise<Met
   };
 }
 
+import { getSessionUser } from "@/lib/auth/session";
+
 export default async function ListingDetailPage({ params }: DetailPageProps) {
   const { slug } = await params;
   const listing = await getListingBySlug(slug);
 
-  if (!listing || !PUBLIC_VISIBLE_STATUSES.has(listing.status)) {
+  if (!listing) {
     notFound();
+  }
+
+  if (!PUBLIC_VISIBLE_STATUSES.has(listing.status)) {
+    const viewer = await getSessionUser();
+    const canPreview =
+      viewer !== null && (viewer.role === "admin" || viewer.id === listing.agentId);
+    if (!canPreview) {
+      notFound();
+    }
   }
 
   const t = await getTranslations("detail");

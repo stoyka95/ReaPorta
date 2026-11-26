@@ -64,6 +64,10 @@ async function main(): Promise<void> {
 
       if (loginCreds) {
         const res = await context.request.post(`${baseUrl}/api/auth/sign-in/email`, {
+          headers: {
+            "Content-Type": "application/json",
+            Origin: baseUrl,
+          },
           data: loginCreds,
         });
         if (!res.ok()) {
