@@ -83,7 +83,8 @@ async function main(): Promise<void> {
         page.on("console", onConsole);
 
         const fullUrl = `${baseUrl}${target.url}`;
-        await page.goto(fullUrl, { waitUntil: "load", timeout: 45_000 });
+        await page.goto(fullUrl, { waitUntil: "domcontentloaded", timeout: 45_000 });
+        await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => {});
         await page.evaluate(async () => {
           await document.fonts.ready;
           const totalHeight = document.body.scrollHeight;

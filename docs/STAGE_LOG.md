@@ -16,6 +16,57 @@ Formát záznamu:
 
 ---
 
+## Závěrečná zpráva — ReaPorta MVP (etapy 0 až 12 kompletně dokončeny, 2026-11-26 09:55)
+
+Projekt **ReaPorta** (český realitní portál MVP) je kompletně dokončen napříč všemi 13 etapami (`0` až `12`) dle `docs/PLAN.md`, `docs/SPEC.md`, `docs/ARCHITECTURE.md` a `DESIGN.md`. Veškeré položky `docs/QA-CHECKLIST.md` (**A1–A20, B1–B9, C1–C11, D1–D5, E1–E13**) jsou ověřeny a odškrtnuty.
+
+### Splnění akceptačních kritérií (AC)
+
+- **M1 Úvodní stránka (AC-1.1–1.5):** Hero vyhledávání s našeptávačem lokalit, 5 dlaždic kategorií, _Nové_ a _Doporučené nabídky_ s jednotnou výškou karet, _Oblíbené lokality_ (8 měst s živými počty z DB), pruh důvěry, CTA pro makléře, JSON-LD `Organization` + `WebSite`.
+- **M2 Vyhledávání a výpis (AC-2.1–2.8):** URL jako jediný zdroj pravdy (`nuqs`), SSR první výsledek s `canonical` a `noindex` při > 2 filtrech, `FilterBar` (`glass-1`), `FilterDrawer` (`glass-3`) s cenovým histogramem, 5 řazení, mřížka/seznam, stránkování po 24, uložení hledání do DB.
+- **M3 Interaktivní mapa (AC-3.1–3.5):** MapLibre GL v5 + `supercluster` (dynamický import mimo bundle `/`), sdílený query builder `/api/search/map`, fokusovatelné `PricePin` (`glass-3`) a `ClusterPin`, split-view 55/45 na desktopu, mobilní mapa s bottom sheetem, `bbox` v URL, zaokrouhlení polohy na ~300 m u `show_exact_location = false`, graceful fallback při výpadku dlaždic.
+- **M4 Detail nabídky (AC-4.1–4.10):** 5fotková mozaika + lightbox, parametry/vybavení, mapa polohy, hypoteční kalkulačka, sticky `ContactCard` (`glass-2`) s odhalením telefonu až po kliku na serveru, poptávkový formulář s rate limitem 5/h/IP a 2 e-maily v `email_outbox`, nahlášení inzerátu, neaktivní stavy (`sold`/`expired`/`paused`) s upozorněním, náhled konceptu vlastníkem/adminem, podobné nabídky, JSON-LD `RealEstateListing` a dynamický PNG OG obrázek.
+- **M5 Účty, oblíbené, uložená hledání (AC-5.1–5.6):** Better Auth + Argon2id (`@node-rs/argon2`), registrace/přihlášení/ověření e-mailu/jednorázový reset hesla, middleware + serverové guardy `requireUser/Agent/Admin`, databázové rate limity (`rate_limits`), `/ucet`, `/ucet/oblibene` (se štítky změny ceny/stavu), `/ucet/hledani`, optimistické srdce s výzvou pro nepřihlášené, idempotentní `pnpm job:alerts` + `/api/cron/alerts`, smazání účtu s anonymizací poptávek.
+- **M6 Dashboard makléře (AC-6.1–6.8):** `DashboardShell` (264px skleněný sidebar + mobilní drawer), přehled s KPI ve Fraunces a 30denním grafem, správa inzerátů s hromadnými akcemi, duplikací, životním cyklem (`pause/resume/sold/extend`, `pnpm job:expire`) a tvrdým smazáním souborů, 6krokový průvodce s autosave, mapovým špendlíkem a bezpečným uploadem `POST /api/upload` (magic bytes, limit 12 MB / 40 fotek, `sharp` re-enkódování do 3 WebP variant + odstranění EXIF/GPS), historie ceny, přísný IDOR test.
+- **M7 Poptávky, statistiky a veřejné profily (AC-7.1–7.5):** Schránka `/dashboard/poptavky` (`new`→`read`→`replied`→`archived` + `mailto:`), `/dashboard/statistiky`, `/dashboard/profil`, veřejný adresář `/makleri`, profily `/makleri/[slug]` a `/agentury/[slug]` (pouze aktivní inzeráty), vizuální kontrola všech 6 e-mailových šablon v `/dev/emails`.
+- **M8 Administrace (AC-8.1–8.7):** `/admin` (KPI + `audit_log`), `/admin/moderace` (schválení / zamítnutí s důvodem + e-mail makléři), `/admin/uzivatele` (role, blokování s okamžitým zrušením sessions a zákazem přihlášení), `/admin/agentury` (CRUD + přiřazení makléřů), `/admin/nahlaseni` (skrytí inzerátu / zamítnutí), `/admin/lokality` (hierarchie + souřadnice), každá akce zapsána do `audit_log`, 403 ověřeno na všech `/admin` a `/api/admin/**` pro neadminy.
+- **M9 Průřezové požadavky (AC-9.1–9.8):** `/sitemap.xml` (pouze aktivní), `/robots.txt`, CSP a bezpečnostní hlavičky, `pnpm check:tokens`, `pnpm check:secrets`, `docs/PERF.md`, `README.md`, `docs/DEPLOY.md`, značka ReaPorta všude, 0 kritických/vážných chyb v axe na všech klíčových stránkách, klávesnicová přístupnost, `prefers-reduced-motion` a `prefers-reduced-transparency`.
+
+### Souhrn finálních měření
+
+| Kontrola                                    | Výsledek                                                                                                  |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `pnpm check:tokens`                         | **OK** (126 souborů v `src/`, 0 pevných hodnot)                                                           |
+| `pnpm check:secrets`                        | **OK** (288 souborů, 0 tajemství)                                                                         |
+| `pnpm typecheck` (`tsc --noEmit`, `strict`) | **OK** (0 chyb)                                                                                           |
+| `pnpm lint` (ESLint)                        | **OK** (0 chyb, 0 varování)                                                                               |
+| `pnpm test` (Vitest unit + DB integrace)    | **41/41 prošlo** (14 souborů, ~15 s)                                                                      |
+| `pnpm test:e2e` (Playwright + axe-core)     | **26/26 prošlo** (25/25 produkční server `pnpm start` za 2,9 min + 1/1 `/dev/styleguide`)                 |
+| `pnpm db:reset` (čistá DB + migrace + seed) | **`8,54 s`** (limit ≤ 10 min)                                                                             |
+| `EXPLAIN ANALYZE` nad **10 000 inzeráty**   | Nejpomalejší dotaz **`10,05 ms`** (limit ≤ 300 ms — 30× rezerva)                                          |
+| Produkční Web Vitals (mobil 4× CPU)         | LCP **`696–956 ms`** (≤ 2 500 ms), CLS **`0–0,0115`** (≤ 0,05)                                            |
+| First Load JS (gzip)                        | `/` **`188 kB`** (+8 kB, zdůvodněno v `docs/PERF.md`), výpis **`216 kB`** (≤ 260 kB), detail **`207 kB`** |
+| Finální snímky (etapa 12, 4 rozlišení)      | 20/20 snímků: `overflow=false`, `consoleErrors=0`                                                         |
+
+### Známá omezení a doporučení pro další rozvoj (post-MVP)
+
+1. **Aktualizace závislostí z `pnpm audit --prod`:** před ostrým nasazením povýšit `maplibre-gl`, `drizzle-orm`, `zod` a `next` (`postcss`) dle seznamu v `docs/PERF.md`.
+2. **Rozpočet `/` a hydratace při 4× CPU:** přesun `NuqsAdapter` jen do výpisových rout sníží First Load JS na `/` pod `180 kB`; rozdělení klientské hydratace hlavičky do `Suspense` zkrátí dlouhé úlohy při 4× CPU pod `200 ms`.
+3. **Produkční infrastruktura (viz `docs/DEPLOY.md`):** doplnit `S3StorageProvider` (S3/R2) pro více instancí, SMTP worker nad `email_outbox` a ostrá data RÚIAN pro `locations`.
+4. **Stránkování dlouhých přehledů:** u stránek `/agentury/[slug]` (> 24 nabídek) a `/admin/moderace` (> 20 položek) doplnit stránkování.
+
+---
+
+## Etapa 12 — E2E, finální QA, dokumentace a polish (2026-11-26 09:55)
+
+**Hotovo:** Kompletní přeběh celé sady Playwright E2E testů (**26/26** — opravena produkční kolize výchozího in-memory rate limiteru Better Auth nastavením `rateLimit: { enabled: false }` ve prospěch naší PostgreSQL tabulky `rate_limits` s českými hláškami, plus odstraněny dvě testovací závodní podmínky v `e2e/admin.spec.ts` a `e2e/auth.spec.ts`), ověřena čistá instalace `pnpm db:reset` (`8,54 s`) + `pnpm build`, zkontrolována čistota kódu (0 `TODO`/`FIXME`/`@ts-ignore`/`console.log` v `src/`), kompletně aktualizováno `README.md`, vytvořen produkční návod `docs/DEPLOY.md`, pořízeno 20 finálních snímků v `docs/screenshots/etapa-12/` a uzavřen celý `docs/QA-CHECKLIST.md`.
+**Odchylky:** `e2e/styleguide.spec.ts` se spouští proti dev serveru (v produkci `/dev/styleguide` vrací 404 dle AC), zbývajících 25 E2E testů bylo ověřeno přímo proti produkčnímu serveru `pnpm start`.
+**Měření:** `pnpm check:tokens` OK, `pnpm check:secrets` OK, `pnpm typecheck` OK, `pnpm lint` OK, `pnpm test` 41/41, Playwright **26/26** (25/25 `pnpm start` za 2,9 min + 1/1 `styleguide` dev), `pnpm db:reset` `8,54 s`, 20/20 finálních snímků `overflow=false` a `consoleErrors=0`.
+**Vizuální rubrika (`DESIGN.md` kap. 13, finální přísné hodnocení):** Hierarchie 5/5 (na úvodu, výpisu, detailu, dashboardu i v adminu je primární akce okamžitě zřejmá), Vzduch 5/5 (vyvážené rozestupy sekcí a karet bez zahuštění i na mobilních 390 px), Typografie 5/5 (Fraunces důsledně jen v nadpisech a KPI, Inter + tabulární číslice s `nbsp` na všech cenách a plochách), Barva 5/5 (čistý světlý povrch, jediný fialový akcent, všechny kontrasty ≥ 4,5 : 1), Sklo 5/5 (tři úrovně skla v navigaci, panelech, mapových špendlících a modálech bez vnoření), Fotky 4/5 (všechny karty v řadě drží identickou výšku bez ořezu, ukázkové fotky jsou záměrně vektorové architektonické ilustrace ze seedu), Stavy 5/5 (kompletní pokrytí hover/focus/disabled/loading/chyba/prázdný stav napříč portálem), Konzistence 4/5 (veřejný profil agentury a moderační fronta zatím nestránkují delší seznamy nad 20 položek), Responzivita 5/5 (20/20 snímků ve 4 rozlišeních 390/768/1280/1536 px bez horizontálního přetečení a bez chyb v konzoli), Detail 4/5 (na 390 px dlaždicích _Oblíbené lokality_ je delší název „České Budějovice“ a „Hradec Králové“ zalamován na 2 řádky těsně nad počtem nabídek).
+**Snímky:** `docs/screenshots/etapa-12/` (`home-*.png`, `search-*.png`, `detail-*.png`, `dashboard-*.png`, `admin-*.png` ve 4 šířkách).
+**Zbývá / známé problémy:** Projekt MVP je kompletní; post-MVP náměty viz _Závěrečná zpráva_ výše.
+**Další krok:** Hotovo — připraveno k předání.
+
 ## Etapa 11 — SEO, přístupnost, výkon a bezpečnost (2026-11-26 09:12)
 
 **Hotovo:** AC-9.1, AC-9.2, AC-9.3, AC-9.4, AC-9.5, AC-9.6, AC-9.7. Dynamická `/sitemap.xml` (`src/app/sitemap.ts` + `src/db/queries/seo.ts`: pouze aktivní inzeráty + makléři + agentury + kategorie × top města, bez konceptů a neaktivních), `/robots.txt` (`src/app/robots.ts`), JSON-LD `Organization` + `WebSite` a `canonical` na `/`, bezpečnostní hlavičky a CSP v `next.config.ts` (`Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`, v prod `Strict-Transport-Security`), oprava `useSecureCookies` na `APP_URL.startsWith("https://")` pro bezproblémový chod lokálního produkčního buildu i HTTPS nasazení, odstranění vnořených `<main>` landmarků (každá stránka má nyní právě jeden `<main>`), skript `pnpm check:secrets` (`scripts/check-secrets.ts`), `EXPLAIN (ANALYZE, BUFFERS)` benchmark nad 400 i 10 000 inzeráty (`scripts/perf-explain.ts`), měření produkčních Core Web Vitals (`scripts/perf-vitals.ts`) a podrobná zpráva v `docs/PERF.md`.

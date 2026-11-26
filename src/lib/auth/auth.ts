@@ -22,6 +22,9 @@ function createAuthInstance() {
     appName: "ReaPorta",
     baseURL: getAppUrl(),
     secret: getAuthSecret(),
+    rateLimit: {
+      enabled: false,
+    },
     database: drizzleAdapter(getDb(), {
       provider: "pg",
       schema: {

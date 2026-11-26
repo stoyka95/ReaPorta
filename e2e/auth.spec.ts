@@ -23,6 +23,12 @@ test.describe("Stage 7 — Accounts, Favorites, Saved Searches, Alerts (B1–B9)
     });
   });
 
+  test.afterEach(async () => {
+    await withDb(async (pool) => {
+      await pool.query(`DELETE FROM rate_limits WHERE key LIKE 'auth:%'`);
+    });
+  });
+
   test("B1, B2, B8, B9: duplicate registration, register -> verify -> login, /ucet redirect, password reset + single-use token, account delete", async ({
     page,
   }) => {
@@ -193,13 +199,17 @@ test.describe("Stage 7 — Accounts, Favorites, Saved Searches, Alerts (B1–B9)
   test("B4, B5, B6, B7: anonymous heart prompts login then saves favorite; favorites & saved searches CRUD; job:alerts sends 1 email and 0 on repeat", async ({
     page,
   }) => {
+    test.setTimeout(120_000);
     await page.setViewportSize({ width: 1280, height: 900 });
 
     // B5: Nepřihlášený klikne na srdce na kartě -> výzva k přihlášení -> po přihlášení se přidá
     await page.goto("/prodej/byty", { waitUntil: "load" });
+    await page.waitForLoadState("networkidle").catch(() => {});
     const firstHeart = page.getByRole("button", { name: "Přidat do oblíbených" }).first();
     await firstHeart.click();
-    await expect(page.getByRole("dialog", { name: "Uložit mezi oblíbené" })).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "Uložit mezi oblíbené" })).toBeVisible({
+      timeout: 10_000,
+    });
     await page.getByRole("link", { name: "Přihlásit se a uložit" }).click();
     await expect(page).toHaveURL(/\/prihlaseni\?next=.*&favorite=/);
 

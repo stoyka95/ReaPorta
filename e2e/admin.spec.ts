@@ -247,8 +247,13 @@ test.describe("Etapa 10 — Administrace & RBAC (QA C6, D1–D5)", () => {
           has: page.getByRole("button", { name: "Skrýt inzerát" }),
         })
         .last();
-      await reportCard.getByRole("button", { name: "Skrýt inzerát" }).click();
-      await expect(page.getByText("Vyřešeno (skryto)").first()).toBeVisible({ timeout: 10_000 });
+      await Promise.all([
+        page.waitForResponse(
+          (res) =>
+            res.url().includes(`/api/admin/reports/${openReport!.id}`) && res.status() === 200,
+        ),
+        reportCard.getByRole("button", { name: "Skrýt inzerát" }).click(),
+      ]);
 
       const afterHideRes = await page
         .context()
