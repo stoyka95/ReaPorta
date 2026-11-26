@@ -16,6 +16,51 @@ Formát záznamu:
 
 ---
 
+## Souhrn Běhu A — Etapy 0 až 6 (2026-11-26 00:18)
+
+### Co funguje
+
+- **Infrastruktura & DB (etapy 0–1):** Next.js 15.5.29 App Router (TypeScript `strict`), Tailwind CSS v4 s tokeny z `src/styles/tokens.css`, ESLint 9, Prettier, Husky, Vitest, Playwright (Chromium), PostgreSQL 16 v Dockeru (`reaporta_dev` a `reaporta_test`, rozšíření `pg_trgm`, `unaccent`, `citext`), kompletní Drizzle schéma (18 tabulek, 17 enumů, `immutable_unaccent`, GIN trigram index na `locations`, trigger `search_text`), lokální `StorageProvider` + `/media/[...key]`, generátor 40 architektonických SVG→WebP fotek ve 3 velikostech + log agentur, deterministický seed (`faker.seed(2026)`: 14 krajů, 77 okresů, 83 obcí, 113 částí, 400 inzerátů, 3 930 fotek, 60 poptávek, 5 nahlášení, 10 800 denních statistik).
+- **Značka & design systém (etapa 2):** Logo **ReaPorta** (Směr B „Oblouk + bod“ — `docs/BRAND.md`, `public/brand/*`, Fraunces wordmark v křivkách, multi-size `favicon.ico`, `og-default.png`), 29 UI primitiv nad Radix UI v `src/components/ui/` bez pevných barev/hodnot (`pnpm check:tokens`), interaktivní `/dev/styleguide`.
+- **Veřejná úvodní část (etapa 3):** `Navbar` (`glass-1`), `Footer`, vlastní 404/500, české formátovače (`src/lib/format/` s `Intl.PluralRules('cs')` a `nbsp`), `ListingCard` + skeleton, našeptávač `/api/locations/suggest`, kompletní úvodní stránka `/` (M1) a statické stránky (`/o-nas`, `/kontakt`, `/podminky`, `/ochrana-udaju`, `/cookies`, `/inzerce`).
+- **Vyhledávání & výpis (etapa 4):** URL jako jediný zdroj pravdy přes `nuqs` (`nuqs/server`), `GET /api/search`, SSR první výsledek s kanonickým URL a `noindex` při > 2 filtrech, `FilterBar` + `FilterDrawer` se všemi filtry z AC-2.1, cenový histogram z DB, 5 řazení, přepínač mřížka/seznam, stránkování po 24, prázdný stav s _Zrušit filtry_.
+- **Interaktivní mapa (etapa 5):** MapLibre GL v5 + `supercluster` (dynamický import bez SSR mimo bundle `/`), `GET /api/search/map`, `PricePin` (`glass-3`), `ClusterPin`, `MapPreviewCard`, split-view 55/45 na desktopu a celoobrazovková mapa s bottom sheetem na mobilu, _Hledat při pohybu mapy_ se synchronizací `bbox` do URL, zachycení výpadku dlaždic (QA A20), přibližná oblast u `show_exact_location = false` (QA A19).
+- **Detail nabídky (etapa 6):** `/nemovitost/[slug]` (M4), 5fotková mozaika + klávesnicově/dotykově ovladatelný lightbox, parametry a vybavení, `ListingLocationMap`, orientační hypoteční kalkulačka (anuita, AC-4.6), sticky `ContactCard` (`glass-2`) s odhalením telefonu až po kliku na serveru (`POST /api/listings/[id]/phone`), poptávkový formulář se Zod validací + rate limit 5/h/IP + záznam v `inquiries` a 2 e-maily v `email_outbox` (`POST /api/inquiries`), nahlášení inzerátu (`POST /api/reports`), neaktivní stavy (`sold`/`expired`/`paused`) s upozorněním místo 404, podobné nabídky, JSON-LD `RealEstateListing`, canonical a dynamický PNG OpenGraph obrázek (`next/og`).
+
+### Výsledky měření (konec Běhu A)
+
+- `pnpm check:tokens`: **OK** (73 souborů v `src/`, 0 porušení).
+- `pnpm typecheck`: **OK** (0 chyb).
+- `pnpm lint`: **OK** (0 chyb, 0 varování).
+- `pnpm test` (Vitest): **27/27 prošlo** (7 testovacích souborů, včetně integrace filtrů a řazení nad `reaporta_test` v 285 ms).
+- `pnpm test:e2e` (Playwright + axe-core): **12/12 prošlo** (QA A1–A20, styleguide, smoke, axe 0 kritických a vážných chyb na všech veřejných stránkách, 0 chyb v konzoli).
+- `pnpm build` (produkční build Next.js 15): **OK** (28,1 s); First Load JS: `/` 186 kB (route 5,16 kB, `maplibre-gl` mimo bundle), `/nemovitost/[slug]` 205 kB, `/prodej|pronajem/...` 213 kB, sdílený základ 103 kB.
+- `pnpm db:reset`: 16,48 s (7,36 s při opakovaném běhu, cíl ≤ 90 s).
+- Snímky ve 4 rozlišeních (`390`, `768`, `1280`, `1536` px): uloženy a commitnuty v `docs/screenshots/etapa-0/` až `docs/screenshots/etapa-6/`, všechny s `overflow=false`, `consoleErrors=0` a vizuální rubrikou `DESIGN.md` kap. 13 **5/5**.
+
+### Známé problémy a co navazuje v Běhu B (etapy 7–12)
+
+- Funkce navázané na uživatelské účty jsou záměrně odloženy do etapy 7 (Běh B): trvalé ukládání oblíbených (`favorites`), ukládání hledání (`saved_searches`), hlídací pes (`pnpm job:alerts`) a autentizace (`/prihlaseni`, `/registrace`, `/ucet`). Do té doby srdce na kartě/detailu a tlačítko _Uložit hledání_ fungují bezpečně lokálně / s výzvou.
+- Sdílení veřejného profilu makléře/agentury, makléřský průvodce vkládáním a dashboard (`/dashboard`) a administrace (`/admin`) + `/sitemap.xml` a `/robots.txt` patří do etap 8–12 (Běh B).
+
+### Odchylky (všechny zapsány v `docs/DECISIONS.md`)
+
+- Přidány devDependencies `tsx`, `dotenv`, `@eslint/eslintrc`.
+- Mailpit v dev prostředí neběží; veškeré e-maily se ukládají do `email_outbox`.
+- `maplibre-gl` připnuta na stabilní v5 (`^5.5.0` / `5.24.1`) místo v6 kvůli kompatibilitě workeru v Next.js 15 Webpacku.
+- V migraci 0001 přidána `IMMUTABLE` obálka `immutable_unaccent(text)` pro GIN expression index.
+
+---
+
+## Etapa 6 — Detail nabídky (2026-11-26 00:18)
+
+**Hotovo:** AC-4.1, AC-4.2, AC-4.3, AC-4.4, AC-4.6, AC-4.7, AC-4.8, AC-4.9, AC-4.10 (AC-4.5 ukládání oblíbených v DB navazuje v etapě 7). Stránka `/nemovitost/[slug]`, 5fotková mozaika `ListingGallery` s klávesnicově/dotykově ovladatelným lightboxem, rychlý přehled + tabulka parametrů + vybavení, `DynamicListingLocationMap` (přesný bod vs. kruh ~300 m u `show_exact_location = false`), `MortgageCalculator` (`src/lib/mortgage.ts`), sticky `ContactCard` (`glass-2`) s `POST /api/listings/[id]/phone` (číslo není v počátečním HTML), `POST /api/inquiries` (Zod validace, rate limit 5/h/IP přes `rate_limits`, zápis do `inquiries` + 2 e-maily do `email_outbox` přes `src/lib/email.ts`), `ReportListingDialog` + `POST /api/reports`, `MobileContactBar` (`glass-3`), upozornění u `sold`/`expired`/`paused` (místo 404), podobné nabídky, JSON-LD `RealEstateListing`, canonical a dynamický PNG OpenGraph obrázek (`opengraph-image.tsx`).
+**Odchylky:** E-maily se ukládají do `email_outbox` bez Mailpitu (dle `docs/DECISIONS.md`).
+**Měření:** `pnpm check:tokens` OK (73 souborů), `typecheck` OK, `lint` OK, `test` 27/27 (včetně `mortgage.test.ts` a `rate-limit.test.ts`), `test:e2e` 12/12 (QA A13–A19, JSON-LD, OG PNG 200, DB ověření `inquiries` + `email_outbox`, axe 0 kritických/vážných chyb), `pnpm build` OK (`/nemovitost/[slug]` 8,95 kB / First Load 205 kB). Vizuální rubrika `DESIGN.md` kap. 13: 5/5; 0 chyb v konzoli a `overflow=false` na 390/768/1280/1536 px.
+**Snímky:** `docs/screenshots/etapa-6/` (`detail-390.png`, `detail-768.png`, `detail-1280.png`, `detail-1536.png`).
+**Zbývá / známé problémy:** Uložení oblíbených na detailu do DB po implementaci účtů v etapě 7.
+**Další krok:** Konec Běhu A (etapy 0–6). V Běhu B pokračovat etapou 7 (Účty, oblíbené, uložená hledání, hlídací pes).
+
 ## Etapa 5 — Mapa (2026-11-25 23:56)
 
 **Hotovo:** AC-3.1, AC-3.2, AC-3.3, AC-3.4, AC-3.5. Endpoint `GET /api/search/map` sdílející query builder s `/api/search` (zaokrouhlení souřadnic na ~300 m u `show_exact_location = false`), `MapView` (MapLibre GL v5 + `supercluster`, dynamický import bez SSR mimo hlavní bundle), fokusovatelné `PricePin` (`glass-3`) a `ClusterPin` (fialové kruhy s prstencem ve 3 velikostech), `MapPreviewCard`, ovládací prvky v `glass-3`, přepínač _Hledat při pohybu mapy_ se synchronizací `bbox` do URL, desktop split-view 55/45 a mobilní celoobrazovková mapa s bottom sheetem, zachycení výpadku dlaždic (QA A20), `ListingLocationMap` připravena pro detail.
