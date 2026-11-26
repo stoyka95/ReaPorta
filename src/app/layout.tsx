@@ -4,6 +4,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { BRAND } from "@/config/brand";
+import { ToastProvider } from "@/components/ui";
+import { SessionProvider } from "@/components/auth/SessionProvider";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -55,7 +57,11 @@ export default async function RootLayout({
       <body className="font-sans antialiased text-body">
         <div className="page-aurora" aria-hidden="true" />
         <NuqsAdapter>
-          <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+          <NextIntlClientProvider messages={messages}>
+            <ToastProvider>
+              <SessionProvider>{children}</SessionProvider>
+            </ToastProvider>
+          </NextIntlClientProvider>
         </NuqsAdapter>
       </body>
     </html>

@@ -14,6 +14,7 @@ import {
   useToast,
 } from "@/components/ui";
 import { inquirySchema } from "@/features/inquiries/schema";
+import { useSession } from "@/components/auth/SessionProvider";
 import { cn } from "@/lib/cn";
 
 export interface ContactCardProps {
@@ -44,10 +45,11 @@ export function ContactCard({
   const t = useTranslations("detail");
   const tCard = useTranslations("card");
   const { push } = useToast();
+  const { user, isFavorite, toggleFavorite } = useSession();
 
   const [revealedPhone, setRevealedPhone] = React.useState<string | null>(null);
   const [phoneLoading, setPhoneLoading] = React.useState(false);
-  const [favorited, setFavorited] = React.useState(false);
+  const favorited = isFavorite(listingId);
 
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -56,6 +58,13 @@ export function ContactCard({
     `Dobrý den, mám zájem o více informací a prohlídku nabídky „${listingTitle}“.`,
   );
   const [consent, setConsent] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!user) return;
+    setName((prev) => prev || user.name);
+    setEmail((prev) => prev || user.email);
+    setPhone((prev) => prev || user.phone || "");
+  }, [user]);
 
   const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
   const [formError, setFormError] = React.useState<string | null>(null);
@@ -163,11 +172,7 @@ export function ContactCard({
         <button
           type="button"
           onClick={() => {
-            setFavorited((prev) => !prev);
-            push({
-              tone: "info",
-              title: tCard("favoriteLoginHint"),
-            });
+            void toggleFavorite(listingId);
           }}
           aria-pressed={favorited}
           aria-label={favorited ? tCard("favoriteRemove") : tCard("favoriteAdd")}

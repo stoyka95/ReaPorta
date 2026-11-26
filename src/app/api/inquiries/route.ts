@@ -3,6 +3,7 @@ import { createInquiryRecord, getListingContactInfo } from "@/db/queries/listing
 import { inquirySchema } from "@/features/inquiries/schema";
 import { buildInquiryAgentEmail, buildInquiryConfirmationEmail, queueEmail } from "@/lib/email";
 import { consumeRateLimit, extractClientIp, hashIp } from "@/lib/rate-limit";
+import { getSessionUser } from "@/lib/auth/session";
 import { log } from "@/lib/log";
 
 export async function POST(request: Request) {
@@ -48,6 +49,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    const sessionUser = await getSessionUser(request.headers);
     const listing = await getListingContactInfo(parsed.data.listingId);
     if (!listing) {
       return NextResponse.json({ error: "Vybraná nabídka již neexistuje." }, { status: 404 });
@@ -56,6 +58,7 @@ export async function POST(request: Request) {
     const inquiry = await createInquiryRecord({
       listingId: listing.id,
       agentId: listing.agentId,
+      userId: sessionUser?.id ?? null,
       name: parsed.data.name,
       email: parsed.data.email,
       phone: parsed.data.phone || null,

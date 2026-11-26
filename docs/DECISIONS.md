@@ -30,3 +30,9 @@ Důsledek: Ověřování e-mailů v testech a QA probíhá nad tabulkou `email_o
 Kontext: `maplibre-gl@6` vyžaduje externí ESM worker (`maplibre-gl-worker.mjs`), což v Next.js 15 Webpack bundleru způsobovalo chybu načtení workeru v konzoli.
 Rozhodnutí: Připnuta stabilní verze `maplibre-gl@^5.5.0` (5.24.1) s vestavěným workerem; v6 zamítnuta pro nekompatibilitu s výchozím Next.js bundlerem.
 Důsledek: Mapa renderuje vektorové dlaždice bez chyb v konzoli a bez ručního kopírování worker souborů do `public/`.
+
+## 2026-11-26 · Etapa 7 · Better Auth + `@node-rs/argon2` a sloupec `users.email_verified`
+
+Kontext: Better Auth Drizzle adaptér vyžaduje boolean `email_verified` na `users` a doplňkové token sloupce na `accounts`; AC-5.6 vyžaduje hashování hesel přes Argon2id.
+Rozhodnutí: Přidány knihovny `better-auth` a `@node-rs/argon2` (explicitně dle `ARCHITECTURE.md`) a migrace `0002_better_auth_columns.sql` se synchronizací `email_verified` ↔ `email_verified_at`.
+Důsledek: Session jsou uloženy v PostgreSQL, hesla používají Argon2id a blokovaní/smazaní uživatelé jsou odmítnuti při přihlášení i na každém serverovém dotazu.

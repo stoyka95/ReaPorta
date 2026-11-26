@@ -33,15 +33,15 @@ Legenda: ☐ nehotovo · ☑ hotovo. Sloupec "Etapa" říká, od kdy má scéná
 
 | #    | Scénář                                                                           | Očekávání                                                               |
 | ---- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| ☐ B1 | Registrace s existujícím e-mailem                                                | Srozumitelná chyba, bez prozrazení detailů nad rámec nutného            |
-| ☐ B2 | Registrace → e-mail s odkazem → ověření → přihlášení                             | Funguje; nepřihlášený nemá přístup na `/ucet` (přesměrování s `?next=`) |
-| ☐ B3 | 6 chybných přihlášení za sebou                                                   | Rate limit s hláškou                                                    |
-| ☐ B4 | Oblíbené: přidat srdcem na kartě i detailu, zobrazit v `/ucet/oblibene`, odebrat | Stav konzistentní napříč stránkami, optimistický update                 |
-| ☐ B5 | Nepřihlášený klikne na srdce                                                     | Výzva k přihlášení, po přihlášení se akce provede                       |
-| ☐ B6 | Uložit hledání, změnit frekvenci, smazat                                         | Funguje                                                                 |
-| ☐ B7 | `pnpm job:alerts` po vytvoření nové odpovídající nabídky                         | Jeden e-mail; druhé spuštění nic neposílá                               |
-| ☐ B8 | Zapomenuté heslo → reset                                                         | Funguje, starý odkaz po použití neplatí                                 |
-| ☐ B9 | Smazání účtu                                                                     | Oblíbené pryč, poptávky anonymizované                                   |
+| ☑ B1 | Registrace s existujícím e-mailem                                                | Srozumitelná chyba, bez prozrazení detailů nad rámec nutného            |
+| ☑ B2 | Registrace → e-mail s odkazem → ověření → přihlášení                             | Funguje; nepřihlášený nemá přístup na `/ucet` (přesměrování s `?next=`) |
+| ☑ B3 | 6 chybných přihlášení za sebou                                                   | Rate limit s hláškou                                                    |
+| ☑ B4 | Oblíbené: přidat srdcem na kartě i detailu, zobrazit v `/ucet/oblibene`, odebrat | Stav konzistentní napříč stránkami, optimistický update                 |
+| ☑ B5 | Nepřihlášený klikne na srdce                                                     | Výzva k přihlášení, po přihlášení se akce provede                       |
+| ☑ B6 | Uložit hledání, změnit frekvenci, smazat                                         | Funguje                                                                 |
+| ☑ B7 | `pnpm job:alerts` po vytvoření nové odpovídající nabídky                         | Jeden e-mail; druhé spuštění nic neposílá                               |
+| ☑ B8 | Zapomenuté heslo → reset                                                         | Funguje, starý odkaz po použití neplatí                                 |
+| ☑ B9 | Smazání účtu                                                                     | Oblíbené pryč, poptávky anonymizované                                   |
 
 ## C. Makléř (od etapy 8–9)
 

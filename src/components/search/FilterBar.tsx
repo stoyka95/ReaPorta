@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { Bookmark, ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { PriceHistogramResult } from "@/db/queries/listings";
@@ -20,15 +21,19 @@ import {
   RangeSlider,
   SegmentedControl,
   Select,
+  useToast,
   type ComboboxOption,
 } from "@/components/ui";
+import { useSession } from "@/components/auth/SessionProvider";
 import { DISPOSITIONS, type ListingCategory, type OfferType } from "@/lib/search/schema";
 import type { UrlFilterState } from "@/lib/search/url-params";
 import {
+  CATEGORY_LABELS,
   DISPOSITION_LABELS,
   formatListingCount,
   formatShortPrice,
   LOCATION_TYPE_LABELS,
+  OFFER_LABELS,
 } from "@/lib/format";
 
 interface SuggestApiItem {
@@ -45,6 +50,7 @@ export interface FilterBarProps {
   offerType: OfferType;
   category?: ListingCategory;
   pathLocationName?: string | null;
+  pathLocationFullSlug?: string | null;
   urlState: UrlFilterState;
   activeFilterCount: number;
   histogram: PriceHistogramResult;
@@ -60,6 +66,7 @@ export function FilterBar({
   offerType,
   category,
   pathLocationName,
+  pathLocationFullSlug,
   urlState,
   activeFilterCount,
   histogram,
@@ -72,18 +79,90 @@ export function FilterBar({
 }: FilterBarProps) {
   const t = useTranslations("search");
   const tHome = useTranslations("home");
+  const { user } = useSession();
+  const { push } = useToast();
 
   const [locQuery, setLocQuery] = React.useState("");
   const [suggestions, setSuggestions] = React.useState<ComboboxOption[]>([]);
   const [locLoading, setLocLoading] = React.useState(false);
 
   const [priceOpen, setPriceOpen] = React.useState(false);
+  const [saveOpen, setSaveOpen] = React.useState(false);
+  const [saveName, setSaveName] = React.useState("");
+  const [saveFrequency, setSaveFrequency] = React.useState<"instant" | "daily" | "weekly" | "off">(
+    "daily",
+  );
+  const [saveSubmitting, setSaveSubmitting] = React.useState(false);
+  const [saveError, setSaveError] = React.useState<string | null>(null);
   const [draftPriceMin, setDraftPriceMin] = React.useState<string>(
     urlState.cenaOd !== null ? String(urlState.cenaOd) : "",
   );
   const [draftPriceMax, setDraftPriceMax] = React.useState<string>(
     urlState.cenaDo !== null ? String(urlState.cenaDo) : "",
   );
+
+  const defaultSearchName = React.useMemo(() => {
+    const categoryLabel = category ? CATEGORY_LABELS[category]?.toLowerCase() : "nemovitosti";
+    const parts = [
+      OFFER_LABELS[offerType],
+      categoryLabel ?? "nemovitosti",
+      pathLocationName ?? null,
+    ].filter(Boolean);
+    return parts.join(" · ");
+  }, [offerType, category, pathLocationName]);
+
+  React.useEffect(() => {
+    if (saveOpen && !saveName) {
+      setSaveName(defaultSearchName);
+    }
+  }, [saveOpen, saveName, defaultSearchName]);
+
+  async function handleSaveSearch(e: React.FormEvent) {
+    e.preventDefault();
+    setSaveError(null);
+    setSaveSubmitting(true);
+    try {
+      const locations = [...(pathLocationFullSlug ? [pathLocationFullSlug] : []), ...urlState.loc];
+      const params: Record<string, unknown> = {
+        offerType,
+        ...(category ? { category } : {}),
+        locations,
+        ...(urlState.cenaOd !== null ? { priceMin: urlState.cenaOd } : {}),
+        ...(urlState.cenaDo !== null ? { priceMax: urlState.cenaDo } : {}),
+        ...(urlState.plochaOd !== null ? { usableAreaMin: urlState.plochaOd } : {}),
+        ...(urlState.plochaDo !== null ? { usableAreaMax: urlState.plochaDo } : {}),
+        ...(urlState.dispozice.length > 0 ? { dispositions: urlState.dispozice } : {}),
+        ...(urlState.vybaveni.length > 0 ? { amenities: urlState.vybaveni } : {}),
+        ...(urlState.q ? { q: urlState.q } : {}),
+      };
+
+      const res = await fetch("/api/saved-searches", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: saveName.trim() || defaultSearchName,
+          frequency: saveFrequency,
+          params,
+        }),
+      });
+      const data = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        setSaveError(data.error ?? "Hledání se nepodařilo uložit.");
+        return;
+      }
+      setSaveOpen(false);
+      setSaveName("");
+      push({
+        tone: "success",
+        title: "Hledání uloženo",
+        description: "Spravovat jej můžete v sekci Uložená hledání.",
+      });
+    } catch {
+      setSaveError("Něco se nepovedlo. Zkuste to prosím znovu.");
+    } finally {
+      setSaveSubmitting(false);
+    }
+  }
 
   React.useEffect(() => {
     setDraftPriceMin(urlState.cenaOd !== null ? String(urlState.cenaOd) : "");
@@ -356,8 +435,8 @@ export function FilterBar({
             ) : null}
           </Button>
 
-          {/* Uložit hledání (AC-2.8 — vyvolá výzvu k přihlášení do etapy 7) */}
-          <Dialog>
+          {/* Uložit hledání (AC-2.8 / QA B6) */}
+          <Dialog open={saveOpen} onOpenChange={setSaveOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="ghost"
@@ -367,13 +446,69 @@ export function FilterBar({
                 <span className="hidden xl:inline">{t("saveSearch")}</span>
               </Button>
             </DialogTrigger>
-            <DialogContent title={t("saveSearchTitle")} description={t("saveSearchAuthNotice")}>
-              <div className="flex justify-end">
-                <DialogClose asChild>
-                  <Button variant="primary">Rozumím</Button>
-                </DialogClose>
-              </div>
-            </DialogContent>
+            {user ? (
+              <DialogContent
+                title={t("saveSearchTitle")}
+                description="Nastavte název a frekvenci e-mailových upozornění na nové nabídky."
+              >
+                <form onSubmit={handleSaveSearch} className="space-y-4">
+                  <Input
+                    label="Název hledání"
+                    value={saveName}
+                    onChange={(e) => setSaveName(e.target.value)}
+                    placeholder="Např. Prodej bytů v Brně do 7 mil."
+                    required
+                  />
+                  <Select
+                    label="Frekvence upozornění"
+                    value={saveFrequency}
+                    onValueChange={(v) =>
+                      setSaveFrequency(v as "instant" | "daily" | "weekly" | "off")
+                    }
+                    options={[
+                      { value: "instant", label: "Ihned" },
+                      { value: "daily", label: "Denně" },
+                      { value: "weekly", label: "Týdně" },
+                      { value: "off", label: "Vypnuto" },
+                    ]}
+                  />
+                  {saveError ? (
+                    <p role="alert" className="type-small text-danger">
+                      {saveError}
+                    </p>
+                  ) : null}
+                  <div className="flex justify-end gap-2">
+                    <DialogClose asChild>
+                      <Button type="button" variant="ghost">
+                        Zrušit
+                      </Button>
+                    </DialogClose>
+                    <Button type="submit" variant="primary" loading={saveSubmitting}>
+                      Uložit hledání
+                    </Button>
+                  </div>
+                </form>
+              </DialogContent>
+            ) : (
+              <DialogContent title={t("saveSearchTitle")} description={t("saveSearchAuthNotice")}>
+                <div className="flex justify-end gap-2">
+                  <DialogClose asChild>
+                    <Button variant="ghost">Zavřít</Button>
+                  </DialogClose>
+                  <Button variant="primary" asChild onClick={() => setSaveOpen(false)}>
+                    <Link
+                      href={`/prihlaseni?next=${encodeURIComponent(
+                        typeof window !== "undefined"
+                          ? `${window.location.pathname}${window.location.search}`
+                          : "/prodej/vse",
+                      )}`}
+                    >
+                      Přihlásit se
+                    </Link>
+                  </Button>
+                </div>
+              </DialogContent>
+            )}
           </Dialog>
         </div>
 

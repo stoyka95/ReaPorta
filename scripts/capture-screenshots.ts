@@ -18,14 +18,24 @@ interface Target {
 
 async function main(): Promise<void> {
   const stage = process.argv[2];
-  const targetsArg = process.argv.slice(3);
+  const rawArgs = process.argv.slice(3);
+  const loginArg = rawArgs.find((a) => a.startsWith("--login="));
+  const targetsArg = rawArgs.filter((a) => !a.startsWith("--login="));
 
   if (!stage || targetsArg.length === 0) {
     console.error(
-      "Použití: tsx scripts/capture-screenshots.ts <etapa-N> <name=path> [name2=path2 ...]",
+      "Použití: tsx scripts/capture-screenshots.ts <etapa-N> [--login=email:heslo] <name=path> [name2=path2 ...]",
     );
     process.exit(1);
   }
+
+  const loginCreds = loginArg
+    ? (() => {
+        const val = loginArg.slice("--login=".length);
+        const sep = val.indexOf(":");
+        return sep === -1 ? null : { email: val.slice(0, sep), password: val.slice(sep + 1) };
+      })()
+    : null;
 
   const baseUrl = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";
   const outDir = path.resolve(process.cwd(), "docs/screenshots", stage);
@@ -51,6 +61,15 @@ async function main(): Promise<void> {
         locale: "cs-CZ",
       });
       const page = await context.newPage();
+
+      if (loginCreds) {
+        const res = await context.request.post(`${baseUrl}/api/auth/sign-in/email`, {
+          data: loginCreds,
+        });
+        if (!res.ok()) {
+          throw new Error(`Přihlášení pro snímky selhalo (${res.status()})`);
+        }
+      }
 
       for (const target of targets) {
         const errors: string[] = [];

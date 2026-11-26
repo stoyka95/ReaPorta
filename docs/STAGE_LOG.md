@@ -16,6 +16,16 @@ Formát záznamu:
 
 ---
 
+## Etapa 7 — Účty, oblíbené, uložená hledání a hlídací pes (2026-11-26 07:49)
+
+**Hotovo:** AC-2.8, AC-4.5, AC-5.1, AC-5.2, AC-5.3, AC-5.4, AC-5.5, AC-5.6, AC-9.6 (`/nemate-opravneni`). Better Auth nad PostgreSQL (Drizzle adaptér, migrace `0002_better_auth_columns.sql`), hashování hesel Argon2id (`@node-rs/argon2`), middleware ochrana `/ucet`, `/dashboard`, `/admin` s `?next=`, serverové helpery `requireUser/Agent/Admin` a `assertOwnsListing`, rate limity v `rate_limits` (5 chybných přihlášení → 429 při 6. pokusu), stránky `/prihlaseni`, `/registrace` (včetně volby _Chci inzerovat_), `/overeni-emailu`, `/zapomenute-heslo`, `/obnova-hesla`, `/ucet`, `/ucet/oblibene` (včetně štítků změny ceny/stavu), `/ucet/hledani`, optimistické srdce přes `SessionProvider` v `ListingCard` i `ContactCard`, funkční _Uložit hledání_ v `FilterBar`, šablony e-mailů v `email_outbox` a idempotentní úloha `pnpm job:alerts` + `POST /api/cron/alerts`.
+**Odchylky:** Přidán sloupec `users.email_verified` a token sloupce na `accounts` v migraci `0002_better_auth_columns.sql` pro nativní Drizzle adaptér Better Auth; zapsáno v `docs/DECISIONS.md`.
+**Měření:** `pnpm check:tokens` OK (94 souborů), `typecheck` OK, `lint` OK (0 varování), `test` 30/30 (včetně `password.test.ts`, IDOR `auth-guards.integration.test.ts`, idempotence `alerts.integration.test.ts`), Playwright `e2e/auth.spec.ts` 3/3 (všechny scénáře QA B1–B9 + axe 0 kritických/vážných chyb na `/prihlaseni`, `/registrace`, `/ucet`).
+**Vizuální rubrika (`DESIGN.md` kap. 13, přísné hodnocení):** Hierarchie 4/5 (karty _Osobní údaje_ a _Změna hesla_ mají stejnou vizuální váhu), Vzduch 5/5, Typografie 5/5, Barva 4/5 (tlačítko _Smazat účet_ má jemné pozadí bez výraznějšího kontrastu při hoveru), Sklo 4/5 (na `/ucet` je sklo použito hlavně v navigaci, obsah stojí na pevných kartách), Fotky 5/5 (sjednocená výška karet v řadě), Stavy 4/5 (nahrání vlastní profilové fotky navazuje v etapě 8 spolu s upload API), Konzistence 4/5 (navigace účtu používá pilulky místo obdélníkových tabů), Responzivita 5/5 (`overflow=false` a `consoleErrors=0` ve všech 4 šířkách 390/768/1280/1536 px po přepnutí desktop navigace na `lg:`), Detail 4/5 (delší jména v pilulce hlavičky se zkracují elipsou).
+**Snímky:** `docs/screenshots/etapa-7/` (`login-*.png`, `ucet-*.png`, `oblibene-*.png` ve 4 šířkách).
+**Zbývá / známé problémy:** Nahrání profilové fotky navazuje na upload endpoint s `sharp` a magic bytes v etapě 8.
+**Další krok:** Etapa 8 — Dashboard makléře: `DashboardShell`, přehled s grafem, seznam inzerátů s hromadnými akcemi, 6krokový průvodce s autosave, `/api/upload` (magic bytes + `sharp` WebP + odstranění EXIF), duplikace, životní cyklus, historie ceny a IDOR testy.
+
 ## Souhrn Běhu A — Etapy 0 až 6 (2026-11-26 00:18)
 
 ### Co funguje

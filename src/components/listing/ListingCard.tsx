@@ -9,6 +9,7 @@ import type { ListingCardItem } from "@/db/queries/listings";
 import { Badge } from "@/components/ui";
 import { AMENITY_LABELS, formatPrice, formatPricePerM2 } from "@/lib/format";
 import { getImageVariantUrl } from "@/lib/media-url";
+import { useSession } from "@/components/auth/SessionProvider";
 import { cn } from "@/lib/cn";
 
 export interface ListingCardProps {
@@ -31,8 +32,9 @@ export function ListingCard({
   onFavoriteClick,
 }: ListingCardProps) {
   const t = useTranslations("card");
+  const { isFavorite, toggleFavorite } = useSession();
   const [photoIdx, setPhotoIdx] = React.useState(0);
-  const [favorited, setFavorited] = React.useState(false);
+  const favorited = isFavorite(listing.id);
 
   const photos = listing.images;
   const activePhoto = photos[photoIdx] ?? photos[0];
@@ -52,7 +54,7 @@ export function ListingCard({
   function handleHeart(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    setFavorited((prev) => !prev);
+    void toggleFavorite(listing.id);
     onFavoriteClick?.(listing.id);
   }
 

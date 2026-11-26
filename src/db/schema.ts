@@ -126,6 +126,7 @@ export const users = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey(),
     email: citext("email").notNull().unique(),
+    emailVerified: boolean("email_verified").notNull().default(false),
     emailVerifiedAt: timestamp("email_verified_at", { withTimezone: true }),
     name: text("name").notNull(),
     phone: text("phone"),
@@ -168,6 +169,10 @@ export const accounts = pgTable(
     password: text("password"),
     accessToken: text("access_token"),
     refreshToken: text("refresh_token"),
+    idToken: text("id_token"),
+    scope: text("scope"),
+    accessTokenExpiresAt: timestamp("access_token_expires_at", { withTimezone: true }),
+    refreshTokenExpiresAt: timestamp("refresh_token_expires_at", { withTimezone: true }),
     expiresAt: timestamp("expires_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),

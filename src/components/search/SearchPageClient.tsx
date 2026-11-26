@@ -244,6 +244,7 @@ export function SearchPageClient({
         offerType={offerType}
         category={category}
         pathLocationName={pathLocationName}
+        pathLocationFullSlug={pathLocationSlug}
         urlState={urlState as UrlFilterState}
         activeFilterCount={activeFilterCount}
         histogram={histogram}

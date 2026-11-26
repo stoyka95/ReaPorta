@@ -16,6 +16,7 @@ import {
   CLOSING_SENTENCES,
 } from "./data/listing-templates";
 import { generatePlaceholderPhotos, type PoolPhotoMeta } from "./generate-placeholder-photos";
+import { hashPassword } from "../src/lib/auth/password";
 
 type OfferType = "sale" | "rent";
 type Category = "flat" | "house" | "land" | "commercial" | "other";
@@ -58,13 +59,6 @@ interface SeededLocationNode {
   weight: number;
   tier: "praha" | "brno" | "other";
   isUrban: boolean;
-}
-
-function hashSeedPassword(password: string): string {
-  // Deterministický scrypt hash (v etapě 7 napojeno na Better Auth)
-  const salt = "reaporta-seed-salt-2026";
-  const key = crypto.scryptSync(password, salt, 64).toString("hex");
-  return `scrypt:${salt}:${key}`;
 }
 
 function pickWeighted<T>(items: Array<{ item: T; weight: number }>): T {
@@ -357,12 +351,13 @@ export async function runSeed(databaseUrl = process.env.DATABASE_URL): Promise<v
     }
 
     // 2. Seed Users (1 admin, 14 agents, 8 regular users)
-    const passwordHash = hashSeedPassword("Heslo12345!");
+    const passwordHash = await hashPassword("Heslo12345!");
 
     const [adminUser] = await db
       .insert(schema.users)
       .values({
         email: "admin@reaporta.test",
+        emailVerified: true,
         emailVerifiedAt: new Date("2026-01-10T09:00:00Z"),
         name: "Správce ReaPorta",
         phone: "+420 222 100 001",
@@ -454,6 +449,7 @@ export async function runSeed(databaseUrl = process.env.DATABASE_URL): Promise<v
         .insert(schema.users)
         .values({
           email,
+          emailVerified: true,
           emailVerifiedAt: new Date("2026-01-15T10:00:00Z"),
           name: displayName,
           phone,
@@ -509,6 +505,7 @@ export async function runSeed(databaseUrl = process.env.DATABASE_URL): Promise<v
         .insert(schema.users)
         .values({
           email,
+          emailVerified: true,
           emailVerifiedAt: new Date("2026-02-10T11:00:00Z"),
           name,
           phone: `+420 77${(i % 7) + 1} ${String(200 + i * 31).padStart(3, "0")} ${String(400 + i * 19).padStart(3, "0")}`,
